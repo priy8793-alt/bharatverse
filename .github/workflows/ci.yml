@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-check:
+    name: Backend — syntax & dependency check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci --omit=dev
+
+      - name: Check server entry-point parses
+        working-directory: backend
+        run: node --check server.js
+
+      - name: Check all route files parse
+        working-directory: backend
+        run: |
+          for f in routes/*.js; do node --check "$f" && echo "  ✓ $f"; done
+
+      - name: Check all service files parse
+        working-directory: backend
+        run: |
+          for f in services/*.js; do node --check "$f" && echo "  ✓ $f"; done
+
+      - name: Validate vercel.json
+        run: node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8')); console.log('vercel.json is valid JSON ✓')"
+
+  docker-lint:
+    name: Dockerfile lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint backend Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: backend/Dockerfile
+          failure-threshold: error

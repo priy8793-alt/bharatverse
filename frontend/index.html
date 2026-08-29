@@ -1367,6 +1367,16 @@ AI_KNOWLEDGE.push({keys:["hello","hi ","hi,","hey"],title:"Namaste!",answer:"Nam
 </script>
 <script>
 /* =========================================================
+   DEPLOYMENT CONFIG — edit only this block before deploying
+   Set BHARATVERSE_API_BASE to your deployed backend URL, e.g.:
+     "https://bharatverse-backend.onrender.com"
+   Leave it as an empty string to use the ?api= / localStorage
+   mechanism instead (no file edit needed for demos).
+   ========================================================= */
+window.BHARATVERSE_API_BASE = "";
+/* ======================================================= */
+
+/* =========================================================
    BACKEND API CONFIG
    The frontend never talks to any AI/vision provider directly —
    everything goes through this backend, which itself falls back to

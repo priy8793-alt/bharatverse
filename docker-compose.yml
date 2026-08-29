@@ -1,0 +1,75 @@
+# ── BharatVerse — Docker Compose ─────────────────────────────────────────────
+# One command to run the complete stack locally (no global MongoDB needed):
+#
+#   docker compose up --build
+#
+# Services:
+#   frontend  → http://localhost:3000  (nginx serving frontend/index.html)
+#   backend   → http://localhost:5000  (Node/Express API)
+#   mongo     → localhost:27017        (MongoDB 7, data in a named volume)
+#
+# First-time seed:
+#   docker compose exec backend npm run seed
+#
+# Environment:
+#   Copy backend/.env.example to backend/.env and fill in optional keys
+#   (AI_API_KEY, CLOUDINARY_*, etc.). The backend runs in Demo Mode without them.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── MongoDB ──────────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ── Backend (Node/Express) ────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    env_file:
+      # Create backend/.env from backend/.env.example before first run.
+      # If the file doesn't exist, Docker Compose will still start — env vars
+      # below provide the minimum needed to function.
+      - path: ./backend/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      # Wire backend to the Compose-managed mongo service
+      MONGO_URI: mongodb://mongo:27017/bharatverse
+      # Allow the nginx frontend container to call the API
+      CLIENT_ORIGIN: http://localhost:3000
+    ports:
+      - "5000:5000"
+    volumes:
+      # Persist uploads to local disk (used when Cloudinary isn't configured)
+      - ./backend/uploads:/app/uploads
+
+  # ── Frontend (nginx static) ───────────────────────────────────────────────────
+  frontend:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  mongo_data:

@@ -1,0 +1,18 @@
+[build]
+  publish = "frontend"
+  # No build command — index.html is already a self-contained static file.
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback: every path serves index.html
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# Long-cache for the large GeoJSON asset
+[[headers]]
+  for = "/india-states.geojson"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
