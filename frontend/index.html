@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BharatVerse — India's Living Heritage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+:root{
+  --ivory:#F6F0E3;
+  --ivory-deep:#EFE6D3;
+  --paper:#FBF7EE;
+  --maroon:#7A1F2B;
+  --maroon-deep:#571622;
+  --saffron:#DE8B3C;
+  --saffron-soft:#EFC28A;
+  --green:#1F4B3F;
+  --green-deep:#123128;
+  --gold:#B8863B;
+  --ink:#2B1810;
+  --ink-soft:#5C4A3D;
+  --line: rgba(43,24,16,0.14);
+  --radius: 4px;
+  --shadow: 0 12px 30px -14px rgba(43,24,16,0.35);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--ivory);
+  color:var(--ink);
+  font-family:'Work Sans',sans-serif;
+  font-weight:400;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  margin:0;
+  color:var(--maroon-deep);
+  letter-spacing:-0.01em;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+img{max-width:100%;display:block;}
+::selection{background:var(--saffron-soft);color:var(--maroon-deep);}
+:focus-visible{outline:2px solid var(--maroon);outline-offset:2px;}
+
+.eyebrow{
+  font-family:'Work Sans',sans-serif;
+  text-transform:uppercase;
+  letter-spacing:0.16em;
+  font-size:12px;
+  font-weight:600;
+  color:var(--maroon);
+  display:flex;align-items:center;gap:10px;
+}
+.eyebrow .dot-motif{display:inline-flex;gap:3px;}
+.dot-motif span{width:4px;height:4px;border-radius:50%;background:var(--gold);display:inline-block;}
+.dot-motif span:nth-child(2){background:var(--saffron);}
+.dot-motif span:nth-child(3){background:var(--green);}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+.section{padding:88px 0;position:relative;}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:44px;flex-wrap:wrap;}
+.section-head h2{font-size:clamp(28px,4vw,40px);margin-top:10px;}
+.section-sub{max-width:520px;color:var(--ink-soft);font-size:15px;}
+
+/* ===== Rangoli signature motif ===== */
+.rangoli-mark{
+  display:inline-block;width:34px;height:34px;position:relative;flex-shrink:0;
+}
+.rangoli-mark svg{width:100%;height:100%;animation:spin 26s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion: reduce){.rangoli-mark svg{animation:none;}}
+
+/* ===== NAV ===== */
+.site-nav{
+  position:sticky;top:0;z-index:80;
+  background:rgba(246,240,227,0.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{max-width:1180px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:36px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--maroon-deep);}
+.nav-links{display:flex;gap:26px;flex:1;font-size:14px;font-weight:500;color:var(--ink-soft);}
+.nav-links a{padding:6px 0;border-bottom:2px solid transparent;transition:.0.7s;}
+.nav-links a:hover,.nav-links a.active{color:var(--maroon);border-color:var(--saffron);}
+.nav-actions{display:flex;align-items:center;gap:8px;}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;color:var(--ink);transition:.0.7s;
+}
+.icon-btn:hover{background:var(--maroon);color:var(--ivory);border-color:var(--maroon);}
+.lang-select{
+  border:1px solid var(--line);background:var(--paper);border-radius:20px;padding:8px 14px;font-size:13px;color:var(--ink-soft);font-weight:500;
+}
+
+/* ===== HERO — FULL FIRST SCREEN ===== */
+.hero{position:relative;min-height:calc(100vh - 67px);height:calc(100vh - 67px);overflow:hidden;padding:0;background:var(--ivory);}
+.hero-pattern{position:absolute;inset:0;pointer-events:none;opacity:.16;z-index:3;background-image:repeating-linear-gradient(45deg,rgba(122,31,43,.05) 0 2px,transparent 2px 34px),repeating-linear-gradient(-45deg,rgba(31,75,63,.04) 0 2px,transparent 2px 34px);}
+.hero-inner{position:relative;width:100%;max-width:none;height:100%;min-height:0;margin:0;padding:0;display:block;}
+.hero-copy{position:absolute;left:0;top:0;bottom:0;width:min(56%,760px);z-index:8;display:flex;flex-direction:column;justify-content:center;padding:70px clamp(28px,6vw,88px);}
+.hero-copy h1{font-size:clamp(42px,6vw,78px);line-height:1.03;margin:18px 0 20px;max-width:720px;}
+.hero-copy h1 em{font-style:italic;color:var(--maroon);}
+.hero-copy p.lede{font-size:18px;color:var(--ink-soft);max-width:560px;margin-bottom:32px;}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;}
+.btn{padding:14px 26px;border-radius:2px;font-weight:600;font-size:14px;letter-spacing:.02em;border:1px solid transparent;transition:.0.7s;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary{background:var(--maroon);color:var(--ivory);}.btn-primary:hover{background:var(--maroon-deep);}
+.btn-outline{border-color:var(--maroon);color:var(--maroon);background:rgba(251,247,238,.76);}.btn-outline:hover{background:var(--maroon);color:var(--ivory);}
+.btn-sm{padding:9px 16px;font-size:12.5px;}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.hero-art svg{width:100%;height:100%;}
+.hero-art .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(246,240,227,.97) 0%,rgba(246,240,227,.88) 23%,rgba(246,240,227,.48) 43%,rgba(246,240,227,.10) 68%,rgba(246,240,227,.02) 100%),linear-gradient(0deg,rgba(43,24,16,.18),transparent 35%);z-index:2;pointer-events:none;}
+.stat-strip{position:absolute;left:0;right:0;bottom:0;z-index:12;margin:0;border-top:1px solid rgba(43,24,16,.14);border-bottom:0;background:rgba(251,247,238,.78);backdrop-filter:blur(10px);}
+.stat-strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);width:100%;max-width:1180px;}
+.stat{padding:18px 10px;text-align:center;border-left:1px solid rgba(43,24,16,.12);}.stat:first-child{border-left:none;}
+.stat b{display:block;font-family:'Fraunces',serif;font-size:clamp(24px,3vw,36px);color:var(--maroon);font-weight:700;}.stat span{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;}
+
+/* ===== CARD GRIDS ===== */
+.grid{display:grid;gap:22px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;transition:.0.7s;cursor:pointer;position:relative;
+}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--saffron);}
+.card-media{height:150px;position:relative;overflow:hidden;}
+.card-body{padding:18px;}
+.card-body .tag{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);font-weight:700;}
+.card-body h4{font-size:17px;margin-top:6px;}
+.card-body p{font-size:13px;color:var(--ink-soft);margin-top:8px;}
+
+.region-card{padding:26px 20px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;transition:.0.7s;}
+.region-card:hover{border-color:var(--green);background:var(--ivory-deep);}
+.region-card h4{font-size:16px;margin-bottom:4px;}
+.region-card span{font-size:12px;color:var(--ink-soft);}
+
+.section-alt{background:var(--ivory-deep);}
+.section-dark{background:var(--green-deep);color:var(--ivory);}
+.section-dark h2,.section-dark h3,.section-dark h4{color:var(--ivory);}
+.section-dark .eyebrow{color:var(--saffron-soft);}
+.section-dark .section-sub{color:rgba(246,240,227,0.72);}
+
+.swatch{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,0.85);}
+
+
+/* Full-screen live culture & heritage carousel */
+.live-heritage-visual{position:absolute;inset:0;width:100%;height:100%;display:block;padding:0;overflow:hidden;background:var(--ivory-deep);}
+.heritage-photo-frame{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0;overflow:hidden;background:var(--ivory-deep);box-shadow:none;}
+.heritage-slide{position:absolute;inset:0;margin:0;opacity:0;transform:scale(1.035);transition:opacity .0.7s ease,transform 5s ease;pointer-events:none;}
+.heritage-slide.active{opacity:1;transform:scale(1);}
+.heritage-slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.heritage-slide figcaption{position:absolute;left:0;right:0;bottom:0;padding:110px 42px 145px;color:#fff;background:linear-gradient(transparent,rgba(30,18,10,.82));display:flex;flex-direction:column;align-items:flex-start;}
+.heritage-slide figcaption span{text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:#f4cf98;font-weight:800;}
+.heritage-slide figcaption strong{font-family:'Fraunces',serif;font-size:clamp(30px,4.5vw,62px);line-height:1.02;margin-top:7px;text-shadow:0 3px 20px rgba(0,0,0,.35);}
+.heritage-slide figcaption small{font-size:14px;margin-top:8px;opacity:.9;}
+.heritage-live-badge{position:absolute;top:28px;right:30px;z-index:8;padding:9px 14px;border-radius:20px;background:rgba(251,247,238,.92);color:var(--maroon);font-size:10px;font-weight:800;letter-spacing:.1em;}
+.heritage-live-badge i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#b52a35;margin-right:6px;box-shadow:0 0 0 3px rgba(181,42,53,.14);}
+.hero-slide-btn{position:absolute;z-index:9;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(43,24,16,.28);color:#fff;font-size:25px;backdrop-filter:blur(6px);cursor:pointer;}
+.hero-prev{left:28px}.hero-next{right:28px}.hero-slide-btn:hover{background:var(--maroon);}
+.heritage-dots{position:absolute;z-index:10;left:50%;bottom:105px;transform:translateX(-50%);display:flex;gap:8px;}
+.heritage-dot{width:9px;height:9px;border:0;border-radius:50%;padding:0;background:rgba(255,255,255,.65);cursor:pointer;}
+.heritage-dot.active{background:#fff;transform:scale(1.3);}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.hero-art .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(246,240,227,.88) 0%,rgba(246,240,227,.48) 30%,rgba(246,240,227,.08) 65%,rgba(246,240,227,.02) 100%);z-index:2;pointer-events:none;}
+@media(max-width:980px){.live-heritage-visual,.heritage-photo-frame{height:100%;}.heritage-slide figcaption{padding:70px 24px 120px}.heritage-slide figcaption strong{font-size:34px}.heritage-live-badge{top:18px;right:18px}.hero-prev{left:14px}.hero-next{right:14px}.heritage-dots{bottom:92px;}}
+@media(max-width:600px){.heritage-slide figcaption{padding:50px 18px 115px}.heritage-slide figcaption strong{font-size:30px}.heritage-slide figcaption small{font-size:12px}.hero-slide-btn{width:42px;height:42px}.heritage-dots{bottom:82px;}}
+
+/* ===== MAP ===== */
+.map-shell{
+  display:grid;grid-template-columns:1.15fr 0.85fr;gap:0;
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper);
+  min-height:560px;
+}
+.map-stage{position:relative;overflow:hidden;background:
+  radial-gradient(circle at 30% 20%, rgba(222,139,60,0.10), transparent 55%),
+  var(--ivory-deep);
+  border-right:1px solid var(--line);
+  cursor:grab;
+}
+.map-stage.grabbing{cursor:grabbing;}
+#leafletMap{position:absolute;inset:0;background:transparent;}
+#leafletMap .leaflet-container{background:var(--ivory-deep);font-family:'Work Sans',sans-serif;}
+#leafletMap .leaflet-popup-content-wrapper{background:var(--paper);color:var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);}
+#leafletMap .leaflet-popup-tip{background:var(--paper);}
+#leafletMap .leaflet-control-attribution{background:rgba(251,247,238,.85);font-size:10px;}
+.map-toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center;}
+.map-search-input{flex:1;max-width:340px;padding:10px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);font-family:inherit;font-size:13.5px;color:var(--ink);}
+.map-legend{position:absolute;bottom:16px;right:16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;font-size:11.5px;color:var(--ink-soft);z-index:6;box-shadow:var(--shadow);}
+.map-legend-title{font-weight:700;color:var(--ink);margin-bottom:6px;text-transform:uppercase;font-size:10.5px;letter-spacing:.06em;}
+.map-legend div{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.map-zoom-layer{position:absolute;inset:0;transform-origin:center center;transition:transform .0.7s ease-out;}
+.map-svg-wrap{position:absolute;inset:0;}
+.map-svg-wrap svg{width:100%;height:100%;}
+.state-pin{
+  position:absolute;transform:translate(-50%,-100%);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;z-index:5;
+}
+.state-pin .dot{
+  width:14px;height:14px;border-radius:50% 50% 50% 0;background:var(--maroon);
+  transform:rotate(-45deg);box-shadow:0 0 0 3px rgba(122,31,43,0.18);transition:.0.7s;
+  border:2px solid var(--ivory);
+}
+.state-pin:hover .dot,.state-pin.active .dot{background:var(--saffron);transform:rotate(-45deg) scale(1.25);box-shadow:0 0 0 5px rgba(222,139,60,0.25);}
+.state-pin label{
+  margin-top:4px;font-size:10.5px;font-weight:600;background:var(--paper);padding:2px 7px;border-radius:10px;
+  border:1px solid var(--line);white-space:nowrap;pointer-events:none;opacity:0;transition:.0.7s;transform:translateY(-4px);
+}
+.state-pin:hover label,.state-pin.active label{opacity:1;transform:translateY(0);}
+.map-hint{position:absolute;bottom:16px;left:16px;font-size:12px;color:var(--ink-soft);background:var(--paper);padding:6px 12px;border-radius:20px;border:1px solid var(--line);z-index:6;}
+.map-zoom-controls{position:absolute;top:16px;right:16px;display:flex;flex-direction:column;gap:6px;z-index:6;}
+.map-zoom-controls button{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  font-size:16px;font-weight:700;color:var(--maroon);display:flex;align-items:center;justify-content:center;
+}
+.map-zoom-controls button:hover{background:var(--maroon);color:var(--ivory);}
+
+.map-panel{padding:30px;overflow-y:auto;max-height:560px;}
+.map-panel-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ink-soft);padding:40px;}
+.map-panel h3{font-size:26px;margin-bottom:2px;}
+.map-panel .region-label{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;}
+.map-panel-section{margin-top:20px;}
+.map-panel-section h5{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--maroon);margin-bottom:8px;font-weight:700;}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{
+  font-size:12.5px;padding:6px 12px;border-radius:20px;background:var(--ivory-deep);border:1px solid var(--line);
+}
+.chip.clickable{cursor:pointer;transition:.0.7s;}
+.chip.clickable:hover{background:var(--maroon);color:var(--ivory);}
+.artisan-mini{display:flex;gap:12px;align-items:center;margin-top:10px;padding:12px;background:var(--ivory-deep);border-radius:var(--radius);cursor:pointer;}
+.artisan-mini:hover{background:var(--saffron-soft);}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--maroon);color:var(--ivory);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;flex-shrink:0;}
+
+/* ===== AI CHAT ===== */
+.ai-shell{display:grid;grid-template-columns:280px 1fr;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper);min-height:520px;}
+.ai-side{background:var(--green-deep);color:var(--ivory);padding:26px;}
+.ai-side h3{color:var(--ivory);font-size:20px;display:flex;align-items:center;gap:8px;}
+.ai-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.04em;}
+.ai-status.live{background:rgba(31,140,90,0.25);color:#8FE3B4;}
+.ai-status.offline{background:rgba(222,139,60,0.22);color:var(--saffron-soft);}
+.ai-side p{font-size:13px;color:rgba(246,240,227,0.72);margin-top:8px;}
+.ai-lang{margin-top:22px;}
+.ai-lang label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--saffron-soft);font-weight:700;}
+.lang-pills{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.lang-pill{padding:6px 12px;font-size:12px;border-radius:16px;border:1px solid rgba(246,240,227,0.3);color:var(--ivory);}
+.lang-pill.active{background:var(--saffron);color:var(--maroon-deep);border-color:var(--saffron);font-weight:700;}
+.suggested{margin-top:26px;}
+.suggested label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--saffron-soft);font-weight:700;}
+.sugg-item{display:block;width:100%;text-align:left;background:rgba(246,240,227,0.08);border:1px solid rgba(246,240,227,0.16);color:var(--ivory);padding:10px 12px;border-radius:var(--radius);font-size:12.5px;margin-top:8px;transition:.0.7s;}
+.sugg-item:hover{background:var(--saffron);color:var(--maroon-deep);border-color:var(--saffron);}
+.ai-main{display:flex;flex-direction:column;}
+.ai-log{flex:1;padding:26px;overflow-y:auto;max-height:100%;display:flex;flex-direction:column;gap:14px;}
+.msg{max-width:78%;padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.55;}
+.msg.bot{background:var(--ivory-deep);align-self:flex-start;border-bottom-left-radius:2px;}
+.msg.user{background:var(--maroon);color:var(--ivory);align-self:flex-end;border-bottom-right-radius:2px;}
+.msg.bot .msg-title{font-weight:700;color:var(--maroon);display:block;margin-bottom:4px;font-family:'Fraunces',serif;}
+.ai-typing{align-self:flex-start;font-size:12px;color:var(--ink-soft);font-style:italic;padding-left:16px;}
+.ai-input-row{display:flex;gap:10px;padding:18px 22px;border-top:1px solid var(--line);}
+.ai-input-row input{flex:1;border:1px solid var(--line);border-radius:20px;padding:12px 18px;font-size:14px;background:var(--ivory);}
+.ai-input-row input:focus{outline:none;border-color:var(--maroon);}
+.ai-send{width:44px;height:44px;border-radius:50%;background:var(--maroon);color:var(--ivory);border:none;display:flex;align-items:center;justify-content:center;}
+.ai-send:hover{background:var(--maroon-deep);}
+
+/* ===== ART RECOGNITION ===== */
+.recog-shell{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper);}
+.recog-upload{padding:36px;border-right:1px solid var(--line);}
+.dropzone{
+  border:2px dashed var(--line);border-radius:var(--radius);padding:34px 20px;text-align:center;color:var(--ink-soft);
+  transition:.0.7s;position:relative;
+}
+.dropzone.drag{border-color:var(--saffron);background:var(--ivory-deep);}
+.dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.preview-box{margin-top:20px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;height:220px;display:none;align-items:center;justify-content:center;background:var(--ivory-deep);}
+.preview-box img{width:100%;height:100%;object-fit:cover;}
+.recog-result{padding:36px;}
+.result-empty{color:var(--ink-soft);font-size:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;padding:30px 10px;}
+.result-card{display:none;}
+.result-card .tag{color:var(--gold);}
+.result-card h3{font-size:26px;margin:8px 0 2px;}
+.result-meta{display:flex;gap:8px;margin:10px 0 18px;flex-wrap:wrap;}
+.progress-line{margin-top:20px;}
+.progress-line .row{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-bottom:4px;}
+.bar-track{height:6px;background:var(--ivory-deep);border-radius:6px;overflow:hidden;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--saffron));width:0;transition:width 1.0.7s ease;}
+.spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--maroon);animation:sp 0.8s linear infinite;margin:0 auto 14px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* ===== EVENTS ===== */
+.event-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
+.filter-pill{padding:8px 16px;border-radius:20px;border:1px solid var(--line);font-size:12.5px;background:var(--paper);color:var(--ink-soft);font-weight:500;}
+.filter-pill.active{background:var(--maroon);color:var(--ivory);border-color:var(--maroon);}
+.event-card{display:flex;gap:18px;padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:14px;align-items:center;transition:.0.7s;}
+.event-card:hover{border-color:var(--saffron);box-shadow:var(--shadow);}
+.event-date{width:64px;flex-shrink:0;text-align:center;background:var(--maroon);color:var(--ivory);border-radius:var(--radius);padding:10px 4px;}
+.event-date b{display:block;font-family:'Fraunces',serif;font-size:20px;}
+.event-date span{font-size:10px;text-transform:uppercase;letter-spacing:0.05em;}
+.event-info{flex:1;}
+.event-info h4{font-size:16px;}
+.event-info p{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+.event-tags{display:flex;gap:6px;margin-top:8px;}
+
+/* ===== DASHBOARD ===== */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:36px;}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
+.kpi b{font-family:'Fraunces',serif;font-size:32px;color:var(--maroon);display:block;}
+.kpi span{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.06em;}
+.dash-grid{display:grid;grid-template-columns:1.3fr 0.7fr;gap:20px;}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:26px;}
+.panel h4{font-size:15px;margin-bottom:18px;}
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:200px;}
+.bar-chart .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.bar-chart .col .b{width:100%;background:linear-gradient(180deg,var(--saffron),var(--maroon));border-radius:3px 3px 0 0;transition:height 0.7s ease;}
+.bar-chart .col label{font-size:9.5px;margin-top:8px;color:var(--ink-soft);text-align:center;}
+.donut-wrap{display:flex;align-items:center;gap:20px;justify-content:center;margin-top:10px;}
+.donut{width:140px;height:140px;border-radius:50%;flex-shrink:0;}
+.donut-legend{font-size:12.5px;}
+.donut-legend div{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.donut-legend .sw{width:10px;height:10px;border-radius:3px;}
+.recent-list{margin-top:16px;}
+.recent-row{display:flex;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px solid var(--line);}
+.recent-row:last-child{border:none;}
+.recent-row span{color:var(--ink-soft);font-size:11.5px;}
+
+/* ===== SEARCH ===== */
+.search-overlay{
+  position:fixed;inset:0;background:rgba(43,24,16,0.55);z-index:200;display:none;
+  align-items:flex-start;justify-content:center;padding:80px 20px;
+}
+.search-overlay.open{display:flex;}
+.search-box{background:var(--paper);width:100%;max-width:640px;border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,0.3);max-height:75vh;display:flex;flex-direction:column;}
+.search-box input{border:none;padding:22px 24px;font-size:18px;font-family:'Fraunces',serif;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);width:100%;}
+.search-box input:focus{outline:none;}
+.search-results{overflow-y:auto;padding:10px 0;}
+.search-results-empty{padding:30px 24px;color:var(--ink-soft);font-size:13px;}
+.sr-group{padding:10px 24px;}
+.sr-group h6{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin:0 0 8px;}
+.sr-item{padding:10px 12px;border-radius:6px;font-size:14px;display:flex;justify-content:space-between;cursor:pointer;}
+.sr-item:hover{background:var(--ivory-deep);}
+.sr-item span{color:var(--ink-soft);font-size:11.5px;}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(43,24,16,0.6);z-index:300;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--paper);max-width:720px;width:100%;max-height:86vh;overflow-y:auto;border-radius:var(--radius);position:relative;}
+.modal-media{height:220px;background:var(--green-deep);position:relative;}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.9);border:none;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:2;}
+.modal-content{padding:32px;}
+.modal-content h3{font-size:28px;margin-bottom:4px;}
+.modal-content .region-label{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;}
+.modal-block{margin-top:20px;}
+.modal-block h5{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--maroon);margin-bottom:6px;font-weight:700;}
+.modal-block p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
+.media-placeholder-row{display:flex;gap:10px;margin-top:8px;}
+.media-ph{flex:1;height:70px;border-radius:var(--radius);background:var(--ivory-deep);border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-soft);}
+
+/* ===== FOOTER ===== */
+footer{background:var(--maroon-deep);color:rgba(246,240,227,0.75);padding:56px 0 30px;}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:36px;}
+footer h4{color:var(--ivory);font-size:15px;margin-bottom:14px;}
+footer a{display:block;font-size:13px;color:rgba(246,240,227,0.65);margin-bottom:9px;}
+footer a:hover{color:var(--saffron-soft);}
+.footer-bottom{border-top:1px solid rgba(246,240,227,0.15);padding-top:20px;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.demo-badge{display:inline-block;font-size:10.5px;background:rgba(222,139,60,0.2);color:var(--saffron-soft);padding:3px 9px;border-radius:10px;margin-left:8px;letter-spacing:0.04em;}
+
+/* ===== JOURNEY STRIP ===== */
+.journey{display:flex;justify-content:space-between;align-items:center;margin-top:50px;flex-wrap:wrap;gap:14px;}
+.journey .jstep{flex:1;min-width:120px;text-align:center;position:relative;}
+.journey .jstep b{display:block;font-family:'Fraunces',serif;font-size:15px;color:var(--maroon);}
+.journey .jstep span{font-size:11.5px;color:var(--ink-soft);}
+.journey .jline{flex:0.4;height:1px;background:var(--line);margin-top:-18px;}
+
+@media(max-width:980px){
+  .hero-inner{height:100%;}
+  .hero-copy{width:72%;padding:56px 28px;}
+  .hero-art{height:100%;order:initial;}
+  .live-heritage-visual{height:100%;grid-template-columns:1fr 0.7fr;gap:8px;padding:4px;}
+  .heritage-slide figcaption strong{font-size:20px;}
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:repeat(2,1fr);}
+  .map-shell,.ai-shell,.recog-shell{grid-template-columns:1fr;}
+  .map-stage{height:340px;}
+  .dash-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+}
+@media(max-width:600px){
+  .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;}
+  .stat-strip .wrap{grid-template-columns:repeat(2,1fr);}
+  .stat:nth-child(3){border-left:none;}
+}
+
+
+/* ===== REAL HERITAGE IMAGES ===== */
+.image-card-media{height:190px;position:relative;overflow:hidden;background:var(--ivory-deep);}
+.image-card-media img{width:100%;height:100%;object-fit:cover;transition:transform .0.7s ease;}
+.card:hover .image-card-media img{transform:scale(1.06);}
+.image-overlay{position:absolute;inset:auto 0 0;padding:34px 16px 12px;background:linear-gradient(transparent,rgba(20,12,8,.78));color:white;}
+.image-overlay strong{font-family:'Fraunces',serif;font-size:18px;}
+.heritage-showcase{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;}
+.heritage-feature{position:relative;min-height:100%;border-radius:6px;overflow:hidden;background:var(--green-deep);cursor:pointer;}
+.heritage-feature img{width:100%;height:100%;object-fit:cover;transition:transform .0.7s ease;}
+.heritage-feature:hover img{transform:scale(1.035);}
+.heritage-feature-content{position:absolute;inset:auto 0 0;padding:70px 30px 28px;background:linear-gradient(transparent,rgba(18,10,7,.88));color:white;}
+.heritage-feature-content h3{color:white;font-size:32px;}
+.heritage-feature-content p{margin:7px 0 0;color:rgba(255,255,255,.8);font-size:14px;max-width:620px;}
+.heritage-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.heritage-mini{position:relative;min-height:203px;border-radius:6px;overflow:hidden;background:var(--paper);cursor:pointer;border:1px solid var(--line);}
+.heritage-mini img{width:100%;height:100%;object-fit:cover;transition:transform .0.7s ease;}
+.heritage-mini:hover img{transform:scale(1.06);}
+.heritage-mini .image-overlay strong{font-size:15px;}
+.state-heritage{margin-top:20px;border-radius:5px;overflow:hidden;border:1px solid var(--line);background:var(--ivory-deep);}
+.state-heritage img{width:100%;height:170px;object-fit:cover;}
+.state-heritage-info{padding:13px 14px;}
+.state-heritage-info b{font-family:'Fraunces',serif;color:var(--maroon-deep);font-size:17px;}
+.state-heritage-info span{display:block;color:var(--ink-soft);font-size:12px;margin-top:3px;}
+@media(max-width:760px){.heritage-showcase{grid-template-columns:1fr}.heritage-feature{min-height:330px}.heritage-mini{min-height:160px}}
+
+.hero-art img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.hero-art{z-index:1;}
+.hero-copy{position:relative;z-index:5;}
+.hero-pattern{z-index:2;}
+.hero-art .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(246,240,227,.96) 0%,rgba(246,240,227,.72) 38%,rgba(246,240,227,.12) 72%,rgba(246,240,227,.05) 100%);z-index:2;pointer-events:none;}
+.quiz-shell{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;max-width:680px;margin:0 auto;}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;}
+.quiz-progress-track{height:5px;background:var(--ivory-deep);border-radius:4px;overflow:hidden;margin-bottom:22px;}
+.quiz-progress-fill{height:100%;background:var(--saffron);transition:width .3s ease;}
+.quiz-question{font-family:'Fraunces',serif;font-size:21px;color:var(--ink);margin-bottom:18px;line-height:1.4;}
+.quiz-options{display:flex;flex-direction:column;gap:10px;}
+.quiz-option{text-align:left;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--ivory);font-size:14.5px;color:var(--ink);cursor:pointer;transition:.15s;}
+.quiz-option:hover{border-color:var(--saffron);background:var(--ivory-deep);}
+.quiz-option.selected{border-color:var(--maroon);background:rgba(122,31,43,0.08);}
+.quiz-option.correct{border-color:var(--green);background:rgba(31,75,63,0.12);}
+.quiz-option.incorrect{border-color:var(--maroon);background:rgba(122,31,43,0.12);}
+.quiz-option:disabled{cursor:default;}
+.quiz-explain{margin-top:14px;font-size:13.5px;color:var(--ink-soft);background:var(--ivory-deep);border-radius:var(--radius);padding:12px 14px;display:none;}
+.quiz-explain.show{display:block;}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;}
+.quiz-score-ring{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;background:conic-gradient(var(--saffron) calc(var(--pct,0)*1%), var(--ivory-deep) 0);}
+.quiz-score-ring span{background:var(--paper);width:74px;height:74px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:22px;color:var(--maroon);}
+.quiz-result-row{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+.quiz-result-row:last-child{border-bottom:none;}
+.quiz-result-icon{flex-shrink:0;width:20px;}
+.quiz-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;justify-content:center;}
+.backend-banner{display:none;background:rgba(222,139,60,0.16);border:1px solid var(--saffron);color:var(--maroon-deep);font-size:12.5px;padding:8px 14px;border-radius:var(--radius);margin-bottom:16px;text-align:center;}
+.backend-banner.show{display:block;}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="rangoli-mark" id="navMark"></span> BharatVerse</div>
+    <div class="nav-links">
+      <a href="#home" class="nav-link active" data-target="home" data-i18n="nav.home">Home</a>
+      <a href="#explore" class="nav-link" data-target="explore" data-i18n="nav.explore">Explore India</a>
+      <a href="#map" class="nav-link" data-target="map" data-i18n="nav.map">Heritage Map</a>
+      <a href="#crafts" class="nav-link" data-target="crafts" data-i18n="nav.crafts">Art &amp; Craft</a>
+      <a href="#folk" class="nav-link" data-target="folk" data-i18n="nav.folk">Folk Culture</a>
+      <a href="#artisans" class="nav-link" data-target="artisans" data-i18n="nav.artisans">Artisan Stories</a>
+      <a href="#bharatai" class="nav-link" data-target="bharatai" data-i18n="nav.bharatai">Bharat AI</a>
+      <a href="#quiz" class="nav-link" data-target="quiz" data-i18n="nav.quiz">Heritage Quiz</a>
+      <a href="#community" class="nav-link" data-target="community" data-i18n="nav.community">Community</a>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn" id="searchBtn" title="Search" aria-label="Search">🔍</button>
+      <select class="lang-select" id="navLangSelect" title="Language">
+        <option>EN</option><option>हिं</option><option>বাং</option><option>தமி</option>
+      </select>
+      <button class="icon-btn" title="Profile" aria-label="Profile">👤</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="home">
+  <div class="hero-pattern"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> <span data-i18n="hero.eyebrow">Digital Heritage Platform</span></div>
+      <h1 data-i18n="hero.title">Discover the <em>Living Heritage</em> of India</h1>
+      <p class="lede" data-i18n="hero.sub">Explore traditions, stories, art and communities that make India unique — mapped, documented, and kept alive for generations to come.</p>
+      <div class="cta-row">
+        <a href="#map" class="btn btn-primary" data-i18n="hero.cta1">Explore India →</a>
+        <a href="#crafts" class="btn btn-outline" data-i18n="hero.cta2">Discover Heritage</a>
+      </div>
+    </div>
+    <div class="hero-art" id="heroArt"></div>
+  </div>
+  <div class="stat-strip">
+    <div class="wrap">
+      <div class="stat"><b class="counter" data-to="29">0</b><span data-i18n="hero.stat1">States &amp; UTs Mapped</span></div>
+      <div class="stat"><b class="counter" data-to="412">0</b><span data-i18n="hero.stat2">Cultural Traditions</span></div>
+      <div class="stat"><b class="counter" data-to="186">0</b><span data-i18n="hero.stat3">Art &amp; Craft Forms</span></div>
+      <div class="stat"><b class="counter" data-to="960">0</b><span data-i18n="hero.stat4">Artisan Communities</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= EXPLORE BY REGION ================= -->
+<section class="section" id="explore">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Explore India</div>
+        <h2 data-i18n="explore.title">Explore by Region</h2>
+      </div>
+      <p class="section-sub" data-i18n="explore.sub">India's culture shifts with its geography — from Himalayan folk art to coastal temple traditions. Start with a region.</p>
+    </div>
+    <div class="grid grid-4" id="regionGrid"></div>
+  </div>
+</section>
+
+<!-- ================= FEATURED TRADITIONS ================= -->
+<section class="section section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Featured</div>
+        <h2 data-i18n="featured.title">Featured Cultural Traditions</h2>
+      </div>
+      <p class="section-sub" data-i18n="featured.sub">A living record of rituals, motifs and knowledge passed down through generations.</p>
+    </div>
+    <div class="grid grid-4" id="featuredGrid"></div>
+  </div>
+</section>
+
+<!-- ================= ARTS & CRAFTS ================= -->
+<section class="section" id="crafts">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Made by Hand</div>
+        <h2 data-i18n="crafts.title">Traditional Arts &amp; Crafts</h2>
+      </div>
+      <p class="section-sub" data-i18n="crafts.sub">Textiles, paintings and crafts, each carrying centuries of technique.</p>
+    </div>
+    <div class="grid grid-4" id="craftGrid"></div>
+  </div>
+</section>
+
+<!-- ================= FOLK MUSIC & DANCE ================= -->
+<section class="section section-dark" id="folk">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Rhythm &amp; Movement</div>
+        <h2 data-i18n="folk.title">Folk Music &amp; Dance</h2>
+      </div>
+      <p class="section-sub" data-i18n="folk.sub">From Odissi's temple grace to Bihu's harvest energy — India dances in dialects.</p>
+    </div>
+    <div class="grid grid-3" id="danceGrid"></div>
+  </div>
+</section>
+
+<!-- ================= STORIES ================= -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Told, Not Just Recorded</div>
+        <h2 data-i18n="stories.title">Stories of India</h2>
+      </div>
+      <p class="section-sub" data-i18n="stories.sub">Folk tales and oral histories behind the traditions.</p>
+    </div>
+    <div class="grid grid-3" id="storyGrid"></div>
+  </div>
+</section>
+
+<!-- ================= TEMPLE & HERITAGE GALLERY ================= -->
+<section class="section section-alt" id="heritage-gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> See India · Live Gallery</div>
+        <h2 data-i18n="gallery.title">Temples, Monuments &amp; Living Heritage</h2>
+      </div>
+      <p class="section-sub" data-i18n="gallery.sub">Real heritage imagery makes every state, tradition and story easier to discover. Select a card to open its heritage detail.</p>
+    </div>
+    <div class="heritage-showcase" id="heritageShowcase"></div>
+  </div>
+</section>
+
+<!-- ================= HERITAGE MAP ================= -->
+<section class="section section-alt" id="map">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Real GIS Boundaries · State/UT-level</div>
+        <h2 data-i18n="map.title">India Heritage Map</h2>
+      </div>
+      <p class="section-sub" data-i18n="map.sub">Accurate state/UT boundaries with heritage, artisan and event markers. Click a state to view its traditions, art forms, festivals, languages and artisans. Scroll to zoom, drag to pan.</p>
+    </div>
+    <div id="mapBackendBanner" class="backend-banner">Backend unavailable — map boundaries and markers can't load. Start the backend (see backend/README.md), or <a href="#" onclick="promptForBackendUrl();return false;">set the deployed backend URL</a>.</div>
+    <div class="map-toolbar">
+      <input type="text" id="mapStateSearch" list="mapStateList" placeholder="Search for a state or UT…" class="map-search-input">
+      <datalist id="mapStateList"></datalist>
+      <button class="btn btn-outline btn-sm" id="mapResetBtn">Reset View</button>
+    </div>
+    <div class="map-shell">
+      <div class="map-stage" id="mapStage">
+        <div id="leafletMap" style="width:100%;height:100%;"></div>
+        <div class="map-hint">Click a state · scroll to zoom · drag to pan</div>
+        <div class="map-zoom-controls">
+          <button id="zoomInBtn" aria-label="Zoom in">+</button>
+          <button id="zoomOutBtn" aria-label="Zoom out">−</button>
+          <button id="zoomResetBtn" aria-label="Reset zoom" style="font-size:11px;">⟲</button>
+        </div>
+        <div class="map-legend" id="mapLegend">
+          <div class="map-legend-title">Legend</div>
+          <div><span class="legend-dot" style="background:#1F4B3F;"></span>Stable heritage</div>
+          <div><span class="legend-dot" style="background:#DE8B3C;"></span>Vulnerable heritage</div>
+          <div><span class="legend-dot" style="background:#7A1F2B;"></span>At-risk heritage</div>
+          <div><span class="legend-dot" style="background:#B8863B;"></span>Artisan (approx. location)</div>
+          <div><span class="legend-dot" style="background:#5C4A3D;"></span>Festival / event (approx.)</div>
+        </div>
+      </div>
+      <div class="map-panel" id="mapPanel">
+        <div class="map-panel-empty">
+          <div class="rangoli-mark" style="width:56px;height:56px;margin-bottom:16px;" id="mapEmptyMark"></div>
+          <h3 style="font-size:19px;">No state selected</h3>
+          <p style="font-size:13px;max-width:260px;">Click any state on the map — try Jharkhand or Rajasthan to begin.</p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:var(--ink-soft);margin-top:10px;">Boundaries sourced from GADM (via geohacker/india), simplified for web display. They predate the 2014 Telangana bifurcation and the 2019 Jammu &amp; Kashmir/Ladakh reorganisation — see <a href="#" id="mapSourcesLink" style="color:var(--maroon);">Sources &amp; Methodology</a>.</p>
+  </div>
+</section>
+
+
+<!-- ================= BHARAT AI ================= -->
+<section class="section" id="bharatai">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> AI Cultural Guide</div>
+        <h2 data-i18n="ai.title">Ask Bharat AI</h2>
+      </div>
+      <p class="section-sub" data-i18n="ai.sub">A conversational guide to India's art, craft, dance and symbolism — powered live where available, with an offline knowledge base as fallback.</p>
+    </div>
+    <div class="ai-shell">
+      <div class="ai-side">
+        <h3>Bharat AI <span class="ai-status offline" id="aiStatusBadge">Connecting…</span></h3>
+        <p>Ask about any tradition, art form or cultural symbol from across India.</p>
+        <div class="ai-lang">
+          <label>Answer language</label>
+          <div class="lang-pills">
+            <div class="lang-pill active" data-lang="English">English</div>
+            <div class="lang-pill" data-lang="Hindi">हिंदी</div>
+            <div class="lang-pill" data-lang="Regional">Regional</div>
+          </div>
+        </div>
+        <div class="suggested">
+          <label>Suggested questions</label>
+          <button class="sugg-item" data-q="Tell me about Sohrai Art.">Tell me about Sohrai Art.</button>
+          <button class="sugg-item" data-q="What is the history of Madhubani painting?">History of Madhubani painting?</button>
+          <button class="sugg-item" data-q="Which traditional dances belong to Odisha?">Dances of Odisha?</button>
+          <button class="sugg-item" data-q="What does the lotus symbol mean?">What does the lotus symbol mean?</button>
+        </div>
+      </div>
+      <div class="ai-main">
+        <div class="ai-log" id="aiLog"></div>
+        <div class="ai-input-row">
+          <input type="text" id="aiInput" placeholder="Ask Bharat AI about a tradition, art form or symbol…">
+          <button class="ai-send" id="aiSend" aria-label="Send">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ART RECOGNITION ================= -->
+<section class="section section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> AI Recognition</div>
+        <h2 data-i18n="recognition.title">Identify Indian Art</h2>
+      </div>
+      <p class="section-sub" data-i18n="recognition.sub">Upload an image of a craft or painting to identify its origin and meaning.</p>
+    </div>
+    <div class="recog-shell">
+      <div class="recog-upload">
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="fileInput" accept="image/*">
+          <div>📤 Drag &amp; drop an image, or click to upload</div>
+          <div style="font-size:11.5px;margin-top:6px;">JPG or PNG · sent to BharatVerse's recognition service</div>
+        </div>
+        <div class="preview-box" id="previewBox"><img id="previewImg" alt="Uploaded preview"></div>
+        <button class="btn btn-primary btn-sm" id="identifyBtn" style="margin-top:18px;display:none;">Identify Art</button>
+      </div>
+      <div class="recog-result" id="recogResult">
+        <div class="result-empty">
+          <div style="font-size:34px;margin-bottom:10px;">🖼️</div>
+          Upload an image to see a simulated AI identification result.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HERITAGE QUIZ ================= -->
+<section class="section" id="quiz">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Test Your Knowledge</div>
+        <h2 data-i18n="quiz.title">Heritage Quiz</h2>
+      </div>
+      <p class="section-sub" data-i18n="quiz.sub">Five quick questions on India's living heritage, drawn from BharatVerse's own verified records. Answers are graded on the server, never exposed up front.</p>
+    </div>
+    <div id="quizBackendBanner" class="backend-banner">Backend unavailable — showing a small built-in demo question bank. <a href="#" onclick="promptForBackendUrl();return false;">Set the deployed backend URL</a>.</div>
+    <div class="quiz-filters" id="quizFilters">
+      <button class="btn btn-outline btn-sm quiz-filter-btn active" data-state="">All States</button>
+      <button class="btn btn-outline btn-sm quiz-filter-btn" data-state="Jharkhand">Jharkhand</button>
+      <button class="btn btn-outline btn-sm quiz-filter-btn" data-state="Bihar">Bihar</button>
+      <button class="btn btn-outline btn-sm quiz-filter-btn" data-state="Odisha">Odisha</button>
+      <button class="btn btn-outline btn-sm quiz-filter-btn" data-state="Kerala">Kerala</button>
+      <button class="btn btn-outline btn-sm quiz-filter-btn" data-state="Rajasthan">Rajasthan</button>
+    </div>
+    <div class="quiz-shell" id="quizShell">
+      <div class="result-empty" id="quizLoading">Loading questions…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARTISAN STORIES ================= -->
+
+<section class="section" id="artisans">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Meet the Artisans <span class="demo-badge">Demo data</span></div>
+        <h2 data-i18n="artisans.title">Artisan Stories</h2>
+      </div>
+      <p class="section-sub" data-i18n="artisans.sub">The people behind every tradition — their craft, their communities, their stories.</p>
+    </div>
+    <div id="artisanList"></div>
+  </div>
+</section>
+
+<!-- ================= EVENTS ================= -->
+<section class="section section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Calendar</div>
+        <h2 data-i18n="events.title">Cultural Events &amp; Festivals</h2>
+      </div>
+      <p class="section-sub" data-i18n="events.sub">Festivals across India, filterable by state.</p>
+    </div>
+    <div class="event-toolbar" id="eventFilters"></div>
+    <div id="eventList"></div>
+  </div>
+</section>
+
+<!-- ================= COMMUNITY / ADD YOUR HERITAGE ================= -->
+<section class="section section-alt" id="community">
+  <div class="wrap" style="text-align:center;">
+    <div class="section-head" style="display:block;">
+      <div class="eyebrow" style="justify-content:center;"><span class="dot-motif"><span></span><span></span><span></span></span> Community</div>
+      <h2 data-i18n="community.title">Add Your Heritage</h2>
+      <p class="section-sub" data-i18n="community.sub" style="margin:0 auto;">Know a tradition, craft, festival or oral history that isn't documented here yet? Submit it — every contribution enters Pending Verification before publishing.</p>
+    </div>
+    <button class="btn btn-primary" id="openContributeBtn" style="margin-top:8px;">+ Add Your Heritage</button>
+  </div>
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="dot-motif"><span></span><span></span><span></span></span> Preservation Dashboard <span class="demo-badge" id="dashboardBadge">Prototype Dataset</span></div>
+        <h2 data-i18n="dashboard.title">Digital Preservation, Measured</h2>
+      </div>
+      <p class="section-sub" data-i18n="dashboard.sub">How BharatVerse tracks the documentation and safeguarding of India's heritage. Figures are fetched live from the backend when available.</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><b id="kpiHeritage">412</b><span>Documented traditions</span></div>
+      <div class="kpi"><b id="kpiAssets">2,180</b><span>Digitized cultural assets</span></div>
+      <div class="kpi"><b id="kpiArtisans">960</b><span>Artisan profiles</span></div>
+      <div class="kpi"><b id="kpiStates">29 / 29</b><span>States &amp; UTs covered</span></div>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <h4>Documented traditions by state (sample)</h4>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+      <div class="panel">
+        <h4>Conservation status</h4>
+        <div class="donut-wrap">
+          <div class="donut" id="donutChart"></div>
+          <div class="donut-legend" id="donutLegend"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:20px;">
+      <h4>Recently added cultural records</h4>
+      <div class="recent-list" id="recentList"></div>
+    </div>
+
+    <div class="journey">
+      <div class="jstep"><b>Discover</b><span>Browse regions &amp; art forms</span></div>
+      <div class="jline"></div>
+      <div class="jstep"><b>Understand</b><span>Read history &amp; meaning</span></div>
+      <div class="jline"></div>
+      <div class="jstep"><b>Experience</b><span>Ask Bharat AI, identify art</span></div>
+      <div class="jline"></div>
+      <div class="jstep"><b>Preserve</b><span>Track digitization</span></div>
+      <div class="jline"></div>
+      <div class="jstep"><b>Support</b><span>Connect with artisans</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="color:var(--ivory);">BharatVerse</div>
+        <p style="font-size:13px;margin-top:12px;max-width:260px;color:rgba(246,240,227,0.65);">A student prototype for the Smart India Hackathon, built to showcase how technology can preserve India's living heritage.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="#map">Heritage Map</a>
+        <a href="#crafts">Art &amp; Craft</a>
+        <a href="#folk">Folk Culture</a>
+        <a href="#artisans">Artisan Stories</a>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <a href="#bharatai">Bharat AI</a>
+        <a href="#">Preservation Dashboard</a>
+        <a href="#">Cultural Events</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="#">About the Team</a>
+        <a href="#">Smart India Hackathon</a>
+        <a href="#">Roadmap &amp; APIs</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BharatVerse — Student Innovation Prototype</span>
+      <span>Built for demonstration · All cultural data curated for the SIH jury demo</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SEARCH OVERLAY ================= -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search art, craft, dance, festival, state, artisan…">
+    <div class="search-results" id="searchResults">
+      <div class="search-results-empty">Start typing to search across all of BharatVerse.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+/* =========================================================
+   BHARATVERSE — DATA
+   All artisan names, personal stories and statistics in this file
+   are fictional/demo data curated for the SIH prototype, unless
+   otherwise noted.
+   ========================================================= */
+
+const REGIONS = [
+  {id:"north", name:"North India", desc:"Himalayan crafts, Rajputana forts, desert folk art", states:["Rajasthan","Punjab","Haryana","Himachal Pradesh","Uttarakhand","Uttar Pradesh","Delhi"]},
+  {id:"west", name:"West India", desc:"Textile capitals & coastal trade traditions", states:["Gujarat","Maharashtra","Goa"]},
+  {id:"east", name:"East India", desc:"Tribal art, terracotta & river-delta festivals", states:["West Bengal","Odisha","Jharkhand","Bihar"]},
+  {id:"central", name:"Central India", desc:"Ancient cave art, tribal heartlands & river valleys", states:["Madhya Pradesh","Chhattisgarh"]},
+  {id:"south", name:"South India", desc:"Temple architecture, classical dance & bronze work", states:["Kerala","Tamil Nadu","Karnataka","Andhra Pradesh","Telangana"]},
+  {id:"northeast", name:"Northeast India", desc:"Bamboo craft, weaving & river-valley festivals", states:["Assam","Meghalaya","Manipur","Mizoram","Nagaland","Tripura","Arunachal Pradesh","Sikkim"]},
+];
+
+const STATES = {
+  Jharkhand:{
+    region:"East India", capital:"Ranchi",
+    highlights:"Tribal wall art, Chhau masks, Sarhul spring festival and dense sal forests shape a culture rooted in nature-worship.",
+    traditions:["Sohrai Wall Painting","Khovar Marriage Art","Chhau Mask Making","Sarhul Festival Rites"],
+    artForms:["Sohrai Art","Khovar Art","Paitkar Scroll Painting"],
+    festivals:["Sarhul","Sohrai Festival","Karma Festival"],
+    languages:["Hindi","Santali","Mundari","Ho"],
+    artisan:{name:"Budhni Devi",craft:"Sohrai Wall Painting"},
+  },
+  Rajasthan:{
+    region:"North India", capital:"Jaipur",
+    highlights:"Desert forts, vivid textiles and miniature painting traditions carried by royal ateliers for centuries.",
+    traditions:["Phad Scroll Storytelling","Puppetry (Kathputli)","Bandhani Tie-Dye","Fort Fresco Restoration"],
+    artForms:["Blue Pottery","Miniature Painting","Bandhani Textile"],
+    festivals:["Pushkar Camel Fair","Teej","Gangaur"],
+    languages:["Hindi","Rajasthani","Marwari"],
+    artisan:{name:"Ram Lal Joshi",craft:"Phad Painting"},
+  },
+  Gujarat:{
+    region:"West India", capital:"Gandhinagar",
+    highlights:"A trading heartland where mirror-work embroidery, block printing and garba rhythms define daily life.",
+    traditions:["Rabari Embroidery","Bandhani Craft","Garba Dance Circles","Patola Weaving Rituals"],
+    artForms:["Patola Silk Weaving","Bandhani","Mirror-work Embroidery"],
+    festivals:["Navratri","Rann Utsav","Kite Festival (Uttarayan)"],
+    languages:["Gujarati","Hindi","Kutchi"],
+    artisan:{name:"Salemamad Khatri",craft:"Patola Weaving"},
+  },
+  "West Bengal":{
+    region:"East India", capital:"Kolkata",
+    highlights:"River-delta culture of terracotta temples, Baul mysticism and the grand civic art of Durga Puja.",
+    traditions:["Durga Puja Pandal Art","Baul Minstrel Singing","Terracotta Temple Carving","Kantha Stitching"],
+    artForms:["Kantha Embroidery","Terracotta Art","Patachitra (Bengal)"],
+    festivals:["Durga Puja","Poila Boishakh","Rath Yatra"],
+    languages:["Bengali","Hindi"],
+    artisan:{name:"Anjali Chitrakar",craft:"Bengal Patachitra"},
+  },
+  Odisha:{
+    region:"East India", capital:"Bhubaneswar",
+    highlights:"Temple towns and coastal groves where classical dance and palm-leaf scripture merge with tribal art.",
+    traditions:["Jagannath Temple Rituals","Palm-Leaf Manuscript Etching","Sand Art of Puri","Sambalpuri Weaving"],
+    artForms:["Pattachitra (Odisha)","Sambalpuri Ikat","Palm-Leaf Engraving"],
+    festivals:["Rath Yatra","Konark Dance Festival","Nuakhai"],
+    languages:["Odia","Hindi"],
+    artisan:{name:"Bhaskar Mahapatra",craft:"Pattachitra Painting"},
+  },
+  Maharashtra:{
+    region:"West India", capital:"Mumbai",
+    highlights:"From cave-temple sculpture to Warli's dotted forests, a state layered with ancient and folk traditions.",
+    traditions:["Warli Wall Painting","Lavani Performance","Ganesh Chaturthi Idol-Making","Paithani Weaving"],
+    artForms:["Warli Art","Paithani Sari Weaving","Bidri-inspired Metalwork"],
+    festivals:["Ganesh Chaturthi","Gudi Padwa","Nagpanchami"],
+    languages:["Marathi","Hindi"],
+    artisan:{name:"Jivya Soma Mashe Jr.",craft:"Warli Painting"},
+  },
+  Kerala:{
+    region:"South India", capital:"Thiruvananthapuram",
+    highlights:"Backwater villages and temple courtyards where classical dance-drama and boat-racing rituals thrive.",
+    traditions:["Kathakali Performance","Snake Boat Racing","Theyyam Ritual Dance","Coir Craft"],
+    artForms:["Kathakali Masks & Makeup","Mural Painting (Kerala)","Coir Weaving"],
+    festivals:["Onam","Thrissur Pooram","Vallam Kali"],
+    languages:["Malayalam","English"],
+    artisan:{name:"Krishnan Namboothiri",craft:"Kathakali Mask Making"},
+  },
+  "Tamil Nadu":{
+    region:"South India", capital:"Chennai",
+    highlights:"Bronze-casting temple towns and a classical dance heritage that stretches back over a millennium.",
+    traditions:["Bharatanatyam Practice","Bronze Idol Casting","Kolam Floor Art","Tanjore Painting Gilding"],
+    artForms:["Tanjore Painting","Bronze Casting (Chola technique)","Kolam Art"],
+    festivals:["Pongal","Chithirai Festival","Natyanjali Dance Festival"],
+    languages:["Tamil","English"],
+    artisan:{name:"Meenakshi Sundaram",craft:"Tanjore Painting"},
+  },
+  Assam:{
+    region:"Northeast India", capital:"Guwahati",
+    highlights:"Tea-garden hills and river valleys where bamboo craft and Bihu rhythms mark every harvest season.",
+    traditions:["Bihu Dance","Muga Silk Weaving","Bamboo Craft","Mask-Making of Majuli"],
+    artForms:["Muga Silk Weaving","Majuli Mask Art","Bamboo & Cane Craft"],
+    festivals:["Bihu","Ambubachi Mela","Majuli Festival"],
+    languages:["Assamese","Bodo","Hindi"],
+    artisan:{name:"Hemanta Borah",craft:"Majuli Mask Making"},
+  },
+
+  /* ---- Additional states & UTs (concise profiles) ---- */
+  Punjab:{
+    region:"North India", capital:"Chandigarh",
+    highlights:"Land of five rivers, known for its harvest energy, Sufi-influenced folk music and vivid Phulkari embroidery.",
+    traditions:["Bhangra Performance","Phulkari Embroidery","Gurdwara Langar Traditions","Harvest Fairs"],
+    artForms:["Phulkari Embroidery","Punjabi Juttis (footwear craft)"],
+    festivals:["Baisakhi","Lohri","Hola Mohalla"],
+    languages:["Punjabi","Hindi"],
+    artisan:{name:"Gurpreet Kaur",craft:"Phulkari Embroidery"},
+  },
+  Haryana:{
+    region:"North India", capital:"Chandigarh",
+    highlights:"An agrarian state where folk ballads, wrestling akharas and traditional embroidery reflect rural life.",
+    traditions:["Ghoomar Folk Dance","Phag Folk Songs","Sammi Dance","Traditional Wrestling (Kushti)"],
+    artForms:["Panja Durree Weaving","Haryanvi Embroidery"],
+    festivals:["Teej","Gugga Naumi","Baisakhi"],
+    languages:["Haryanvi","Hindi"],
+    artisan:{name:"Suresh Yadav",craft:"Panja Durree Weaving"},
+  },
+  "Himachal Pradesh":{
+    region:"North India", capital:"Shimla",
+    highlights:"Himalayan valleys where hand-spun wool, temple wood-carving and mountain harvest festivals define daily life.",
+    traditions:["Kullu Shawl Weaving","Chamba Rumal Embroidery","Wood Temple Carving","Kinnauri Craft"],
+    artForms:["Chamba Rumal Embroidery","Kullu Shawl Weaving"],
+    festivals:["Kullu Dussehra","Losar","Minjar Fair"],
+    languages:["Hindi","Pahari"],
+    artisan:{name:"Devki Thakur",craft:"Chamba Rumal Embroidery"},
+  },
+  Uttarakhand:{
+    region:"North India", capital:"Dehradun",
+    highlights:"A Himalayan pilgrimage state where Aipan floor art and mountain folk dance accompany temple rituals.",
+    traditions:["Aipan Floor Art","Char Dham Pilgrimage Rites","Chholiya Dance","Ringal Bamboo Craft"],
+    artForms:["Aipan Ritual Art","Ringal Bamboo Weaving"],
+    festivals:["Kumaon Holi","Harela","Nanda Devi Raj Jat"],
+    languages:["Hindi","Garhwali","Kumaoni"],
+    artisan:{name:"Kamla Bisht",craft:"Aipan Floor Art"},
+  },
+  "Uttar Pradesh":{
+    region:"North India", capital:"Lucknow",
+    highlights:"Home to Chikankari embroidery, Banarasi weaving and centuries of Awadhi courtly craft tradition.",
+    traditions:["Chikankari Embroidery","Banarasi Silk Weaving","Kathak Performance","Diwali Lamp-Making"],
+    artForms:["Chikankari Embroidery","Banarasi Brocade Weaving"],
+    festivals:["Diwali","Kumbh Mela","Ram Navami"],
+    languages:["Hindi","Urdu","Awadhi"],
+    artisan:{name:"Naseem Bano",craft:"Chikankari Embroidery"},
+  },
+  Bihar:{
+    region:"East India", capital:"Patna",
+    highlights:"The Mithila cultural belt, birthplace of Madhubani painting and centuries-old riverine harvest rites.",
+    traditions:["Madhubani Wall Painting","Chhath Puja Rituals","Sikki Grass Craft","Sujani Embroidery"],
+    artForms:["Madhubani Painting","Sikki Grass Weaving"],
+    festivals:["Chhath Puja","Sonepur Mela","Vivah Panchami"],
+    languages:["Hindi","Bhojpuri","Maithili"],
+    artisan:{name:"Sita Devi",craft:"Madhubani Painting"},
+  },
+  "Madhya Pradesh":{
+    region:"Central India", capital:"Bhopal",
+    highlights:"India's tribal heartland, home to Gond painting, ancient cave art and the Narmada's riverine festivals.",
+    traditions:["Gond Painting","Bagh Print Textile","Bhil Tribal Art","Narmada Parikrama Rituals"],
+    artForms:["Gond Art","Bagh Hand-Block Printing"],
+    festivals:["Bhagoria Haat","Khajuraho Dance Festival","Navratri"],
+    languages:["Hindi","Gondi","Bhili"],
+    artisan:{name:"Jangarh Kalam Jr.",craft:"Gond Painting"},
+  },
+  Chhattisgarh:{
+    region:"Central India", capital:"Raipur",
+    highlights:"Dense forests and tribal villages that preserve some of India's oldest terracotta and bell-metal crafts.",
+    traditions:["Dhokra Bell-Metal Casting","Bastar Wood Carving","Tribal Harvest Dance","Terracotta Craft"],
+    artForms:["Dhokra Metal Craft","Bastar Wood Carving"],
+    festivals:["Bastar Dussehra","Hareli","Madai Festival"],
+    languages:["Hindi","Chhattisgarhi","Gondi"],
+    artisan:{name:"Sukhram Baghel",craft:"Dhokra Casting"},
+  },
+  Goa:{
+    region:"West India", capital:"Panaji",
+    highlights:"A coastal culture blending Indo-Portuguese heritage with folk dance, azulejo tilework and fisherfolk festivals.",
+    traditions:["Fugdi Folk Dance","Azulejo Tile Painting","Zagor Ritual Theatre","Feni Distillation Craft"],
+    artForms:["Goan Azulejo Tilework","Coconut Shell Craft"],
+    festivals:["Goa Carnival","Shigmo","Sao Joao"],
+    languages:["Konkani","Marathi","English"],
+    artisan:{name:"Maria Fernandes",craft:"Azulejo Tile Painting"},
+  },
+  Karnataka:{
+    region:"South India", capital:"Bengaluru",
+    highlights:"Home to Mysore silk, Yakshagana theatre and centuries of temple bronze and sandalwood carving.",
+    traditions:["Yakshagana Performance","Mysore Silk Weaving","Sandalwood Carving","Dasara Elephant Procession"],
+    artForms:["Mysore Painting","Sandalwood Carving","Bidriware Metalwork"],
+    festivals:["Mysore Dasara","Ugadi","Karaga Festival"],
+    languages:["Kannada","English"],
+    artisan:{name:"Manjunath Rao",craft:"Mysore Painting"},
+  },
+  "Andhra Pradesh":{
+    region:"South India", capital:"Amaravati",
+    highlights:"Coastal temple towns famed for Kalamkari textile art, Kuchipudi dance and pearl craftsmanship.",
+    traditions:["Kuchipudi Performance","Kalamkari Hand-Painting","Tirupati Temple Rituals","Etikoppaka Toy Craft"],
+    artForms:["Kalamkari Textile Art","Etikoppaka Lacquer Toys"],
+    festivals:["Ugadi","Brahmotsavam","Sankranti"],
+    languages:["Telugu","English"],
+    artisan:{name:"Niranjan Reddy",craft:"Kalamkari Painting"},
+  },
+  Telangana:{
+    region:"South India", capital:"Hyderabad",
+    highlights:"A Deccan plateau culture of Nizami architecture, Pochampally weaving and vibrant Bathukamma flower festivals.",
+    traditions:["Bathukamma Flower Festival","Pochampally Ikat Weaving","Bonalu Rituals","Nirmal Painting"],
+    artForms:["Pochampally Ikat","Nirmal Painting & Toys"],
+    festivals:["Bathukamma","Bonalu","Sankranti"],
+    languages:["Telugu","Urdu"],
+    artisan:{name:"Lakshmi Narsaiah",craft:"Pochampally Ikat Weaving"},
+  },
+  Meghalaya:{
+    region:"Northeast India", capital:"Shillong",
+    highlights:"Living root bridges and matrilineal Khasi villages where bamboo craft and harvest songs run deep.",
+    traditions:["Living Root Bridge Cultivation","Khasi Harvest Songs","Bamboo Craft","Wangala Harvest Dance"],
+    artForms:["Khasi Bamboo Weaving","Garo Textile Craft"],
+    festivals:["Wangala Festival","Shad Suk Mynsiem","Behdeinkhlam"],
+    languages:["Khasi","Garo","English"],
+    artisan:{name:"Ibalarilin Nongrum",craft:"Bamboo Craft"},
+  },
+  Manipur:{
+    region:"Northeast India", capital:"Imphal",
+    highlights:"A valley culture celebrated for classical Manipuri dance, martial arts and hand-loom textile traditions.",
+    traditions:["Manipuri Ras Lila Dance","Thang-Ta Martial Art","Moirang Phee Weaving","Lai Haraoba Ritual"],
+    artForms:["Manipuri Handloom Weaving","Longpi Pottery"],
+    festivals:["Lai Haraoba","Sangai Festival","Yaoshang"],
+    languages:["Meiteilon (Manipuri)","English"],
+    artisan:{name:"Ratan Thiyam Jr.",craft:"Moirang Phee Weaving"},
+  },
+  Mizoram:{
+    region:"Northeast India", capital:"Aizawl",
+    highlights:"Hill-top villages where bamboo dance and hand-woven Puanchei textiles mark community harvest life.",
+    traditions:["Cheraw (Bamboo) Dance","Puanchei Weaving","Chapchar Kut Festival Rites","Bamboo Craft"],
+    artForms:["Puanchei Textile Weaving","Mizo Bamboo Craft"],
+    festivals:["Chapchar Kut","Mim Kut","Pawl Kut"],
+    languages:["Mizo","English"],
+    artisan:{name:"Lalrinmawii Sailo",craft:"Puanchei Weaving"},
+  },
+  Nagaland:{
+    region:"Northeast India", capital:"Kohima",
+    highlights:"A land of tribal councils and the Hornbill Festival, known for wood carving and warrior weaving traditions.",
+    traditions:["Hornbill Festival Rites","Naga Shawl Weaving","Log Drum Carving","Tribal Warrior Dance"],
+    artForms:["Naga Tribal Shawl Weaving","Wood & Bamboo Carving"],
+    festivals:["Hornbill Festival","Sekrenyi","Moatsu"],
+    languages:["English","Nagamese"],
+    artisan:{name:"Vilhou Kevichusa",craft:"Naga Shawl Weaving"},
+  },
+  Tripura:{
+    region:"Northeast India", capital:"Agartala",
+    highlights:"Palace ruins and tribal hills where bamboo craft and riverine harvest dance sustain daily rhythm.",
+    traditions:["Garia Puja Rites","Risa Handloom Weaving","Hojagiri Dance","Bamboo & Cane Craft"],
+    artForms:["Risa Textile Weaving","Tripuri Bamboo Craft"],
+    festivals:["Garia Puja","Kharchi Puja","Hojagiri Festival"],
+    languages:["Bengali","Kokborok"],
+    artisan:{name:"Bimal Debbarma",craft:"Risa Handloom Weaving"},
+  },
+  "Arunachal Pradesh":{
+    region:"Northeast India", capital:"Itanagar",
+    highlights:"India's easternmost frontier, home to Monpa mask-making, thangka painting and mountain harvest festivals.",
+    traditions:["Monpa Mask Dance","Thangka Painting","Losar Buddhist Festival Rites","Cane & Bamboo Craft"],
+    artForms:["Thangka Painting","Monpa Mask Carving"],
+    festivals:["Losar","Solung","Nyokum"],
+    languages:["English","Nyishi","Monpa"],
+    artisan:{name:"Tenzin Norbu",craft:"Thangka Painting"},
+  },
+  Sikkim:{
+    region:"Northeast India", capital:"Gangtok",
+    highlights:"A Himalayan Buddhist state where monastery mask dances and carpet weaving preserve mountain heritage.",
+    traditions:["Cham Mask Dance","Sikkimese Carpet Weaving","Losar Monastery Rites","Thangka Painting"],
+    artForms:["Sikkimese Carpet Weaving","Thangka Painting"],
+    festivals:["Losar","Saga Dawa","Pang Lhabsol"],
+    languages:["Nepali","Bhutia","Lepcha"],
+    artisan:{name:"Pema Yolmo",craft:"Sikkimese Carpet Weaving"},
+  },
+  Delhi:{
+    region:"North India", capital:"New Delhi",
+    highlights:"India's capital, layered with Mughal courtly craft, Sufi music and a living bazaar culture in its old quarters.",
+    traditions:["Zardozi Embroidery","Qawwali Performance","Meena Bazaar Craft Trade","Kite Flying (Independence Day)"],
+    artForms:["Zardozi Embroidery","Meenakari Jewellery Work"],
+    festivals:["Phool Walon Ki Sair","Independence Day Kite Flying","Diwali"],
+    languages:["Hindi","Urdu","Punjabi","English"],
+    artisan:{name:"Abdul Sattar",craft:"Zardozi Embroidery"},
+  },
+};
+
+const TRADITIONS = [
+  {id:"sohrai",name:"Sohrai Art",state:"Jharkhand",region:"East India",category:"Painting",
+   history:"Sohrai wall painting is created by Jharkhand's tribal communities during the harvest season, using natural pigments applied with fingers, twigs and chewed cloth swabs directly onto mud walls.",
+   significance:"The murals celebrate cattle, harvest and fertility, and are believed to invite prosperity into the home.",
+   process:"Walls are prepared with layers of natural clay, then comb-scraped and painted using earth pigments in geometric and animal motifs.",
+   materials:"Natural ochre, charcoal, chalk, and locally sourced clay pigments.",
+   festivals:["Sohrai Festival"],communities:["Kurmi","Santhal","Oraon"]},
+  {id:"madhubani",name:"Madhubani Painting",state:"Bihar",region:"East India",category:"Painting",
+   history:"Originating in the Mithila region, Madhubani painting was traditionally done by women on freshly plastered mud walls and floors for festivals and weddings.",
+   significance:"Depicts deities, nature and courtly scenes, often symbolising fertility, prosperity and devotion.",
+   process:"Double-line borders are drawn first and filled with intricate patterns using natural dyes and pigments, with no blank space left.",
+   materials:"Cow dung and mud base, natural dyes from turmeric, indigo and flower pigments.",
+   festivals:["Chhath Puja","Vivah Panchami"],communities:["Mithila Women Artisan Groups"]},
+  {id:"kathakali",name:"Kathakali",state:"Kerala",region:"South India",category:"Dance-Drama",
+   history:"A classical dance-drama dating to the 17th century, combining literature, music, painted faces and elaborate costume to enact Hindu epics.",
+   significance:"Performers train for years to master facial expressions (navarasa) that convey complex emotion without words.",
+   process:"Performances begin with hours of face painting using natural pigments, followed by percussion-driven storytelling through gesture.",
+   materials:"Rice paste, natural pigments, coconut-shell eye extensions, layered costume.",
+   festivals:["Thrissur Pooram"],communities:["Kalamandalam Performing Troupes"]},
+  {id:"pattachitra",name:"Pattachitra",state:"Odisha",region:"East India",category:"Scroll Painting",
+   history:"An ancient cloth-scroll painting tradition tied to Odisha's Jagannath temple, dating back over a thousand years.",
+   significance:"Depicts mythological narratives and is traditionally created to accompany temple rituals and festivals.",
+   process:"Cotton cloth is treated with tamarind paste and chalk, then painted with natural pigments and finished with a lacquer coating.",
+   materials:"Cotton cloth, tamarind seed glue, natural stone and mineral pigments.",
+   festivals:["Rath Yatra"],communities:["Raghurajpur Artisan Village"]},
+  {id:"warli",name:"Warli Painting",state:"Maharashtra",region:"West India",category:"Painting",
+   history:"Practiced by the Warli tribe for over 2,500 years, using simple geometric shapes to depict daily and ritual life.",
+   significance:"Circles, triangles and squares represent the sun, mountains and earth, connecting art to nature-worship.",
+   process:"White rice-paste paint is applied with a bamboo stick onto a mud base tinted with red ochre.",
+   materials:"Rice paste, gum, bamboo sticks, ochre-toned mud walls.",
+   festivals:["Warli Harvest Rituals"],communities:["Warli Tribal Communities"]},
+  {id:"bihu",name:"Bihu Dance",state:"Assam",region:"Northeast India",category:"Folk Dance",
+   history:"A vibrant folk dance performed during the Bihu harvest festivals, marking the Assamese New Year and agricultural cycles.",
+   significance:"Celebrates youth, fertility and the harvest, performed communally with drums and traditional attire.",
+   process:"Dancers move in fast rhythmic steps to dhol and pepa (buffalo-horn pipe), often in open fields.",
+   materials:"Mekhela chador attire, dhol drums, pepa horn.",
+   festivals:["Bihu"],communities:["Assamese Village Communities"]},
+  {id:"kolam",name:"Kolam Floor Art",state:"Tamil Nadu",region:"South India",category:"Ritual Art",
+   history:"A daily ritual floor drawing made by women at dawn using rice flour, believed to invite prosperity and feed small creatures.",
+   significance:"Symbolises hospitality, auspiciousness and the impermanence of beauty as designs fade through the day.",
+   process:"Dots are placed in a grid and connected with continuous looping lines using rice flour between the fingers.",
+   materials:"Rice flour, chalk powder, natural colour powders for festival kolams.",
+   festivals:["Pongal","Margazhi season"],communities:["Tamil Households"]},
+  {id:"phad",name:"Phad Painting",state:"Rajasthan",region:"North India",category:"Scroll Painting",
+   history:"A scroll-painting tradition used by travelling Bhopa priest-singers to narrate the epics of folk deities.",
+   significance:"The scroll itself is treated as a mobile shrine, unrolled during night-long musical narrations.",
+   process:"Cloth is stiffened with starch, sketched in outline, then filled with flat mineral colours in a fixed left-to-right sequence.",
+   materials:"Cotton cloth, starch, natural and mineral pigments.",
+   festivals:["Pabuji Ki Phad Recitals"],communities:["Joshi Family Artisans"]},
+  {id:"gond",name:"Gond Painting",state:"Madhya Pradesh",region:"Central India",category:"Painting",
+   history:"A tribal art form of the Gond people, traditionally painted on mud walls and floors to mark festivals and rites of passage.",
+   significance:"Depicts nature, animals and folklore using dense dot-and-line patterning believed to bring good fortune.",
+   process:"Fine dots and dashes are built up in layers using natural and now acrylic pigments to fill figurative outlines.",
+   materials:"Natural pigments from charcoal, cow dung, coloured soil and plant sap.",
+   festivals:["Bhagoria Haat"],communities:["Gond Tribal Artisan Groups"]},
+  {id:"dhokra",name:"Dhokra Metal Casting",state:"Chhattisgarh",region:"Central India",category:"Metal Craft",
+   history:"One of India's oldest metal-casting techniques, using the lost-wax method and dating back over 4,000 years.",
+   significance:"Produces figurines of deities, animals and tribal life, valued for their rustic textured finish.",
+   process:"A clay core is wrapped in wax threads, coated in clay, then fired so molten metal replaces the melted wax.",
+   materials:"Beeswax, clay, brass or bronze alloy.",
+   festivals:["Bastar Dussehra"],communities:["Bastar Tribal Artisan Communities"]},
+  {id:"kalamkari",name:"Kalamkari",state:"Andhra Pradesh",region:"South India",category:"Textile Art",
+   history:"A hand-painted and block-printed textile art using a bamboo or date-palm pen, dating back over 3,000 years to temple scroll traditions.",
+   significance:"Depicts mythological narratives and nature motifs, historically used for temple hangings.",
+   process:"Cloth is treated in a mix of buffalo milk and myrobalan, then hand-drawn with natural dyes made from roots, leaves and minerals.",
+   materials:"Cotton cloth, natural dyes, a bamboo/kalam pen.",
+   festivals:["Brahmotsavam"],communities:["Srikalahasti & Machilipatnam Artisan Clusters"]},
+  {id:"chikankari",name:"Chikankari Embroidery",state:"Uttar Pradesh",region:"North India",category:"Textile Art",
+   history:"A delicate white-on-white embroidery tradition associated with the Nawabs of Awadh, dating to the Mughal era.",
+   significance:"Prized for its subtlety and craftsmanship, chikankari became a symbol of Lucknow's refined court culture.",
+   process:"Designs are block-printed onto fabric, then hand-embroidered using dozens of traditional stitch types.",
+   materials:"Fine cotton or muslin, white or pastel thread.",
+   festivals:["Lucknow Mahotsav"],communities:["Lucknowi Artisan Families"]},
+];
+
+const CRAFTS = [
+  {id:"bandhani",name:"Bandhani Tie-Dye",state:"Gujarat",category:"Textile"},
+  {id:"blue-pottery",name:"Blue Pottery",state:"Rajasthan",category:"Ceramic"},
+  {id:"patola",name:"Patola Weaving",state:"Gujarat",category:"Textile"},
+  {id:"kantha",name:"Kantha Embroidery",state:"West Bengal",category:"Textile"},
+  {id:"tanjore",name:"Tanjore Painting",state:"Tamil Nadu",category:"Painting"},
+  {id:"khovar",name:"Khovar Marriage Art",state:"Jharkhand",category:"Painting"},
+  {id:"coir",name:"Coir Weaving",state:"Kerala",category:"Craft"},
+  {id:"muga",name:"Muga Silk Weaving",state:"Assam",category:"Textile"},
+  {id:"phulkari",name:"Phulkari Embroidery",state:"Punjab",category:"Textile"},
+  {id:"chamba-rumal",name:"Chamba Rumal Embroidery",state:"Himachal Pradesh",category:"Textile"},
+  {id:"bidri",name:"Bidriware Metalwork",state:"Karnataka",category:"Metal Craft"},
+  {id:"pochampally",name:"Pochampally Ikat Weaving",state:"Telangana",category:"Textile"},
+  {id:"nirmal",name:"Nirmal Painting & Toys",state:"Telangana",category:"Craft"},
+  {id:"aipan",name:"Aipan Floor Art",state:"Uttarakhand",category:"Ritual Art"},
+  {id:"zardozi",name:"Zardozi Embroidery",state:"Delhi",category:"Textile"},
+  {id:"mysore-painting",name:"Mysore Painting",state:"Karnataka",category:"Painting"},
+  {id:"naga-shawl",name:"Naga Shawl Weaving",state:"Nagaland",category:"Textile"},
+  {id:"thangka",name:"Thangka Painting",state:"Sikkim",category:"Painting"},
+];
+
+const DANCES = [
+  {id:"odissi",name:"Odissi",state:"Odisha",desc:"A classical temple dance marked by fluid torso movements and sculptural poses."},
+  {id:"kathakali-d",name:"Kathakali",state:"Kerala",desc:"Dance-drama with elaborate face painting enacting mythological epics."},
+  {id:"lavani",name:"Lavani",state:"Maharashtra",desc:"A powerful, rhythmic folk dance traditionally performed to the beat of the dholki."},
+  {id:"bharatanatyam",name:"Bharatanatyam",state:"Tamil Nadu",desc:"One of India's oldest classical dance forms, rooted in temple ritual."},
+  {id:"bihu-d",name:"Bihu Dance",state:"Assam",desc:"Energetic harvest-festival dance marking the Assamese New Year."},
+  {id:"chhau",name:"Chhau Dance",state:"Jharkhand",desc:"A masked martial-folk dance blending combat training and storytelling."},
+  {id:"bhangra",name:"Bhangra",state:"Punjab",desc:"A high-energy harvest dance performed to the beat of the dhol drum."},
+  {id:"yakshagana",name:"Yakshagana",state:"Karnataka",desc:"A vivid theatre-dance form combining elaborate costume, music and mythological storytelling."},
+  {id:"cheraw",name:"Cheraw (Bamboo Dance)",state:"Mizoram",desc:"Dancers step between clapping bamboo poles in rhythm — one of the Northeast's most recognisable dances."},
+  {id:"manipuri",name:"Manipuri Ras Lila",state:"Manipur",desc:"A graceful classical dance form depicting the divine love of Radha and Krishna."},
+];
+
+const STORIES = [
+  {id:"story1",title:"The Cattle that Painted the Walls",place:"Jharkhand",excerpt:"A Sohrai legend on why the harvest moon calls artists to the walls of their homes."},
+  {id:"story2",title:"The Scroll that Sang at Night",place:"Rajasthan",excerpt:"How Bhopa singers carried entire epics across the desert, rolled inside a single cloth."},
+  {id:"story3",title:"The Fisherman's Boat Race",place:"Kerala",excerpt:"The origin story behind Kerala's thunderous snake-boat races on the backwaters."},
+  {id:"story4",title:"The Bridge that Grows",place:"Meghalaya",excerpt:"How Khasi villagers coax living root bridges from rubber fig trees over generations."},
+  {id:"story5",title:"The Potter's Blue Fire",place:"Rajasthan",excerpt:"The Persian-influenced origins of Jaipur's famous blue pottery kilns."},
+];
+
+const ARTISANS = [
+  {id:"a1",name:"Budhni Devi",location:"Hazaribagh, Jharkhand",craft:"Sohrai Wall Painting",years:34,
+   story:"Budhni Devi learned Sohrai painting from her grandmother, mixing pigments from the same riverbank clay her family has used for three generations.",
+   process:"She prepares the wall with layered mud, then paints using twigs, combs and fingers in a single harvest-season sitting.",
+   community:"Kurmi Artisan Collective"},
+  {id:"a2",name:"Ram Lal Joshi",location:"Bhilwara, Rajasthan",craft:"Phad Scroll Painting",years:41,
+   story:"The fifth generation of Bhopa scroll painters, Ram Lal still travels with musicians to perform night-long recitations of the Phad scrolls he paints.",
+   process:"Each scroll takes weeks — cloth stiffening, outline sketching, and a strict colour-filling order passed down since his great-grandfather.",
+   community:"Joshi Family Artisans"},
+  {id:"a3",name:"Bhaskar Mahapatra",location:"Raghurajpur, Odisha",craft:"Pattachitra Painting",years:22,
+   story:"Bhaskar grew up in Raghurajpur's heritage crafts village, where nearly every household paints Pattachitra scrolls for the Jagannath temple.",
+   process:"He treats cloth with tamarind glue and chalk before applying mineral pigments and a final lacquer coat.",
+   community:"Raghurajpur Artisan Village"},
+  {id:"a4",name:"Krishnan Namboothiri",location:"Thrissur, Kerala",craft:"Kathakali Mask & Makeup",years:29,
+   story:"Krishnan trains young Kathakali performers in the demanding art of facial makeup that can take over three hours to apply.",
+   process:"Natural pigments and rice paste are layered to build the elaborate 'chutti' facial structures unique to each character.",
+   community:"Kalamandalam Performing Troupes"},
+  {id:"a5",name:"Sita Devi",location:"Madhubani, Bihar",craft:"Madhubani Painting",years:38,
+   story:"Sita Devi paints the same courtyard walls her mother once did, now training young women in her village to carry the tradition into digital archives.",
+   process:"She sketches double-line borders first, then fills every space using dyes drawn from turmeric, indigo and flower pigment.",
+   community:"Mithila Women Artisan Groups"},
+  {id:"a6",name:"Gurpreet Kaur",location:"Patiala, Punjab",craft:"Phulkari Embroidery",years:26,
+   story:"Gurpreet learned Phulkari from her grandmother's dowry shawls, and now runs a small cooperative teaching the stitch to young women in her district.",
+   process:"Floss silk thread is darned in geometric floral patterns onto hand-spun khaddar cloth, building the design from the reverse side.",
+   community:"Patiala Phulkari Cooperative"},
+];
+
+const EVENTS = [
+  {id:"e1",name:"Sarhul Festival",state:"Jharkhand",date:"2026-03-24",month:"Mar",day:"24",loc:"Ranchi & surrounding villages",desc:"A spring festival marking the blossoming of the sal tree, celebrated with tribal dance and worship."},
+  {id:"e2",name:"Pushkar Camel Fair",state:"Rajasthan",date:"2026-11-14",month:"Nov",day:"14",loc:"Pushkar, Rajasthan",desc:"One of the world's largest camel and livestock fairs, paired with folk music and craft stalls."},
+  {id:"e3",name:"Navratri Garba Nights",state:"Gujarat",date:"2026-10-03",month:"Oct",day:"03",loc:"Ahmedabad, Gujarat",desc:"Nine nights of garba and dandiya dance circles across Gujarat's cities and villages."},
+  {id:"e4",name:"Durga Puja",state:"West Bengal",date:"2026-10-18",month:"Oct",day:"18",loc:"Kolkata, West Bengal",desc:"Grand civic art installations (pandals) and processions honouring Goddess Durga."},
+  {id:"e5",name:"Rath Yatra",state:"Odisha",date:"2026-07-05",month:"Jul",day:"05",loc:"Puri, Odisha",desc:"The chariot festival of Lord Jagannath, drawing millions of pilgrims to Puri."},
+  {id:"e6",name:"Ganesh Chaturthi",state:"Maharashtra",date:"2026-09-14",month:"Sep",day:"14",loc:"Mumbai & Pune, Maharashtra",desc:"A ten-day festival of elaborately crafted Ganesh idols and public processions."},
+  {id:"e7",name:"Onam",state:"Kerala",date:"2026-08-26",month:"Aug",day:"26",loc:"Statewide, Kerala",desc:"Kerala's harvest festival, marked by snake-boat races and floral kolam art."},
+  {id:"e8",name:"Pongal",state:"Tamil Nadu",date:"2026-01-14",month:"Jan",day:"14",loc:"Statewide, Tamil Nadu",desc:"A four-day harvest festival honouring the sun god and cattle, marked with kolam art."},
+  {id:"e9",name:"Bihu",state:"Assam",date:"2026-04-14",month:"Apr",day:"14",loc:"Statewide, Assam",desc:"The Assamese New Year and harvest festival, celebrated with Bihu dance."},
+  {id:"e10",name:"Hornbill Festival",state:"Nagaland",date:"2026-12-01",month:"Dec",day:"01",loc:"Kisama, Nagaland",desc:"A week-long showcase of Naga tribal dance, craft and cuisine held every December."},
+  {id:"e11",name:"Bastar Dussehra",state:"Chhattisgarh",date:"2026-10-11",month:"Oct",day:"11",loc:"Jagdalpur, Chhattisgarh",desc:"A 75-day tribal festival unique to Bastar, distinct from the rest of India's Dussehra celebrations."},
+  {id:"e12",name:"Hola Mohalla",state:"Punjab",date:"2026-03-03",month:"Mar",day:"03",loc:"Anandpur Sahib, Punjab",desc:"A Sikh martial festival of mock battles, poetry and music held the day after Holi."},
+];
+
+const RECENT_RECORDS = [
+  {name:"Khovar Marriage Art — Jharkhand",tag:"Newly digitized"},
+  {name:"Muga Silk Weaving Process — Assam",tag:"Video documented"},
+  {name:"Theyyam Ritual Dance — Kerala",tag:"Artisan interview added"},
+  {name:"Sambalpuri Ikat Motifs — Odisha",tag:"Pattern archive updated"},
+  {name:"Phulkari Stitch Library — Punjab",tag:"Pattern archive updated"},
+  {name:"Living Root Bridges — Meghalaya",tag:"Field survey added"},
+];
+
+/* Bharat AI offline knowledge base — used when the live model is unavailable */
+const AI_KNOWLEDGE = [
+  {keys:["sohrai"],title:"Sohrai Art",
+   answer:"Sohrai is a tribal wall-painting tradition from Jharkhand, created during the harvest season using natural pigments applied with fingers, twigs and cloth swabs. It celebrates cattle, fertility and the bond between people and nature, and is usually painted directly onto mud walls prepared with layered clay."},
+  {keys:["madhubani"],title:"Madhubani Painting",
+   answer:"Madhubani painting comes from the Mithila region of Bihar and was traditionally created by women on mud walls for weddings and festivals. It uses double-line borders filled edge-to-edge with natural dyes, depicting deities, nature and courtly life, with no space left blank."},
+  {keys:["odisha","dance"],title:"Dances of Odisha",
+   answer:"Odisha is best known for Odissi, a classical temple dance defined by sculptural poses and fluid torso movement (tribhangi). The state also hosts tribal and folk forms like Chhau, celebrated widely during the Konark Dance Festival."},
+  {keys:["lotus","symbol"],title:"The Lotus Symbol",
+   answer:"The lotus is one of India's most recurring cultural symbols, representing purity, spiritual awakening and rebirth — rising clean from muddy water. It appears across temple carving, Madhubani and Pattachitra painting, and classical dance iconography nationwide."},
+  {keys:["kathakali"],title:"Kathakali",
+   answer:"Kathakali is a classical dance-drama from Kerala combining elaborate face painting, costume and percussion to enact Hindu epics. Performers train for years to master the navarasa — nine expressive emotions — conveyed almost entirely through facial and hand gesture."},
+  {keys:["warli"],title:"Warli Painting",
+   answer:"Warli painting is practiced by the Warli tribe of Maharashtra using simple geometric forms — circles, triangles and squares — to represent the sun, mountains and daily rural life. It is painted in white rice paste on ochre-toned mud walls."},
+  {keys:["bihu"],title:"Bihu Dance",
+   answer:"Bihu is Assam's harvest-festival folk dance, performed to mark the Assamese New Year. Dancers move in energetic rhythm to the dhol drum and pepa horn, celebrating youth, fertility and the agricultural cycle."},
+  {keys:["kolam"],title:"Kolam Floor Art",
+   answer:"Kolam is a daily ritual floor drawing made by Tamil women at dawn using rice flour, believed to bring prosperity and offer food to small creatures. Dots are placed in a grid and joined with continuous looping lines."},
+  {keys:["patola"],title:"Patola Weaving",
+   answer:"Patola is a double-ikat silk weaving tradition from Patan, Gujarat, where both warp and weft threads are pre-dyed to precisely align into intricate patterns — a process so exacting that a single sari can take months to complete."},
+  {keys:["gond"],title:"Gond Painting",
+   answer:"Gond painting is a tribal art form from Madhya Pradesh, built from dense dots and dashes that fill figurative outlines of animals, trees and folklore — traditionally painted on mud walls to mark festivals and rites of passage."},
+  {keys:["dhokra"],title:"Dhokra Metal Casting",
+   answer:"Dhokra is a 4,000-year-old lost-wax metal casting technique from Chhattisgarh, where a clay-and-wax mould is fired so molten brass replaces the melted wax — producing figurines with a distinctive rustic, threaded texture."},
+  {keys:["kalamkari"],title:"Kalamkari",
+   answer:"Kalamkari is a hand-painted or block-printed textile art from Andhra Pradesh, using a bamboo pen and natural dyes to depict mythological scenes — a tradition over 3,000 years old, historically used for temple hangings."},
+  {keys:["chikankari"],title:"Chikankari Embroidery",
+   answer:"Chikankari is a delicate white-on-white embroidery tradition from Lucknow, Uttar Pradesh, associated with the Nawabs of Awadh. Designs are block-printed onto fine cotton, then hand-embroidered with dozens of traditional stitch types."},
+  {keys:["phulkari"],title:"Phulkari Embroidery",
+   answer:"Phulkari, meaning 'flower work', is a vibrant embroidery tradition from Punjab, darned in geometric floral patterns onto hand-spun cloth using floss silk thread — traditionally made by women for weddings and dowries."},
+  {keys:["bidri","bidriware"],title:"Bidriware",
+   answer:"Bidriware is a metal-inlay craft from Karnataka, where blackened zinc-alloy vessels are inlaid with fine silver wire patterns — a technique believed to date back to the Bahmani Sultanate era."},
+  {keys:["thangka"],title:"Thangka Painting",
+   answer:"Thangka painting is a Himalayan Buddhist scroll-painting tradition found in Sikkim and Arunachal Pradesh, depicting deities and mandalas on cloth, used as a meditation aid and displayed during monastery festivals."},
+];
+AI_KNOWLEDGE.push({keys:["hello","hi ","hi,","hey"],title:"Namaste!",answer:"Namaste! I'm Bharat AI — ask me about any Indian art form, dance, festival or cultural symbol, and I'll share what BharatVerse has documented."});
+
+/* Approx pin positions (% of map-stage) for a stylised India map */
+
+
+</script>
+<script>
+/* =========================================================
+   BACKEND API CONFIG
+   The frontend never talks to any AI/vision provider directly —
+   everything goes through this backend, which itself falls back to
+   an honestly-labelled DEMO mode when it has no live provider or no
+   database connection. See backend/README.md.
+   ========================================================= */
+function resolveApiBase() {
+  // Priority: ?api= query param (persisted for next visit) > previously
+  // saved override > window.BHARATVERSE_API_BASE (set by hosting) > localhost
+  // default for local development. This lets a judge/demo laptop point the
+  // static Vercel frontend at a deployed backend without editing any file —
+  // e.g. https://bharatverse-three.vercel.app/?api=https://your-backend.onrender.com
+  const params = new URLSearchParams(window.location.search);
+  const fromQuery = params.get("api");
+  if (fromQuery) {
+    try { localStorage.setItem("bharatverse_api_base", fromQuery); } catch {}
+  }
+  const saved = fromQuery || (function () { try { return localStorage.getItem("bharatverse_api_base"); } catch { return null; } })();
+  const base = (saved || window.BHARATVERSE_API_BASE || "http://localhost:5000").trim();
+  return base.replace(/\/+$/, "").replace(/\/api$/, "");
+}
+const API_BASE = resolveApiBase() + "/api";
+let BACKEND_AVAILABLE = null; // null = unknown, true/false once checked
+
+async function bvFetch(path, options = {}) {
+  const resp = await fetch(API_BASE + path, {
+    headers: options.body && !(options.body instanceof FormData) ? { "Content-Type": "application/json" } : undefined,
+    ...options,
+  });
+  let data = null;
+  try { data = await resp.json(); } catch { /* non-JSON response */ }
+  if (!resp.ok) {
+    const err = new Error((data && data.error) || `Request failed (${resp.status})`);
+    err.status = resp.status;
+    err.data = data;
+    throw err;
+  }
+  return data;
+}
+
+async function checkBackend() {
+  try {
+    const data = await bvFetch("/health");
+    BACKEND_AVAILABLE = true;
+    return data;
+  } catch {
+    BACKEND_AVAILABLE = false;
+    document.querySelectorAll(".backend-banner").forEach((b) => b.classList.add("show"));
+    return null;
+  }
+}
+
+function promptForBackendUrl() {
+  const current = (function () { try { return localStorage.getItem("bharatverse_api_base"); } catch { return null; } })() || "";
+  const value = window.prompt(
+    "Enter the deployed backend URL (e.g. https://your-app.onrender.com). Leave blank to clear the override.",
+    current
+  );
+  if (value === null) return; // cancelled
+  try {
+    if (value.trim()) localStorage.setItem("bharatverse_api_base", value.trim());
+    else localStorage.removeItem("bharatverse_api_base");
+  } catch {}
+  window.location.reload();
+}
+
+/* =========================================================
+   UI LANGUAGE (nav language switcher)
+   Translates the main nav, hero and section headings/subs for
+   elements marked with data-i18n="key". EN and Hindi are fully
+   translated; Bengali/Tamil options are listed (real demand
+   signal for future translators) but currently fall back to
+   English with a one-time notice rather than silently doing
+   nothing. Choice persists in localStorage across visits.
+   ========================================================= */
+const UI_TRANSLATIONS = {
+  Hindi: {
+    'nav.home':'होम','nav.explore':'भारत घूमें','nav.map':'हेरिटेज मैप','nav.crafts':'कला और शिल्प',
+    'nav.folk':'लोक संस्कृति','nav.artisans':'कारीगरों की कहानियां','nav.bharatai':'भारत AI',
+    'nav.quiz':'हेरिटेज क्विज़','nav.community':'समुदाय',
+    'hero.eyebrow':'डिजिटल हेरिटेज प्लेटफॉर्म',
+    'hero.title':'भारत की <em>जीवंत विरासत</em> को जानिए',
+    'hero.sub':'भारत को खास बनाने वाली परंपराओं, कहानियों, कला और समुदायों को खोजें — मैप की गई, दस्तावेज़ीकृत, और आने वाली पीढ़ियों के लिए जीवित रखी गई।',
+    'hero.cta1':'भारत घूमें →','hero.cta2':'विरासत खोजें',
+    'hero.stat1':'राज्य और केंद्र शासित प्रदेश मैप किए गए','hero.stat2':'सांस्कृतिक परंपराएं',
+    'hero.stat3':'कला और शिल्प रूप','hero.stat4':'कारीगर समुदाय',
+    'explore.title':'क्षेत्र के अनुसार खोजें',
+    'explore.sub':'भारत की संस्कृति भूगोल के साथ बदलती है — हिमालयी लोक कला से लेकर तटीय मंदिर परंपराओं तक। किसी क्षेत्र से शुरुआत करें।',
+    'featured.title':'प्रमुख सांस्कृतिक परंपराएं',
+    'featured.sub':'पीढ़ियों से चली आ रही रीति-रिवाजों, आकृतियों और ज्ञान का जीवंत रिकॉर्ड।',
+    'crafts.title':'पारंपरिक कला और शिल्प',
+    'crafts.sub':'वस्त्र, चित्रकला और शिल्प, हर एक में सदियों पुरानी तकनीक समाई हुई।',
+    'folk.title':'लोक संगीत और नृत्य',
+    'folk.sub':'ओडिसी की मंदिर-शैली की गरिमा से लेकर बिहू की फसल-ऊर्जा तक — भारत कई बोलियों में नाचता है।',
+    'stories.title':'भारत की कहानियां',
+    'stories.sub':'परंपराओं के पीछे की लोक-कथाएं और मौखिक इतिहास।',
+    'gallery.title':'मंदिर, स्मारक और जीवंत विरासत',
+    'gallery.sub':'असली विरासत की तस्वीरें हर राज्य, परंपरा और कहानी को खोजना आसान बनाती हैं। विवरण देखने के लिए कोई कार्ड चुनें।',
+    'map.title':'भारत हेरिटेज मैप',
+    'map.sub':'सटीक राज्य/केंद्र शासित प्रदेश सीमाएं, विरासत, कारीगर और आयोजन के मार्कर्स के साथ। किसी राज्य पर क्लिक करके उसकी परंपराएं, कला रूप, त्योहार, भाषाएं और कारीगर देखें। ज़ूम के लिए स्क्रॉल करें, पैन के लिए खींचें।',
+    'ai.title':'भारत AI से पूछें',
+    'ai.sub':'भारत की कला, शिल्प, नृत्य और प्रतीकों के लिए एक संवादात्मक गाइड — जहां उपलब्ध हो वहां लाइव, अन्यथा ऑफ़लाइन नॉलेज बेस के साथ।',
+    'recognition.title':'भारतीय कला की पहचान करें',
+    'recognition.sub':'किसी शिल्प या पेंटिंग की तस्वीर अपलोड करें और उसका मूल व अर्थ जानें।',
+    'quiz.title':'हेरिटेज क्विज़',
+    'quiz.sub':'भारत की जीवंत विरासत पर पांच त्वरित प्रश्न, BharatVerse के अपने सत्यापित रिकॉर्ड से लिए गए। उत्तर सर्वर पर जांचे जाते हैं, पहले से नहीं दिखाए जाते।',
+    'artisans.title':'कारीगरों की कहानियां',
+    'artisans.sub':'हर परंपरा के पीछे के लोग — उनका शिल्प, उनके समुदाय, उनकी कहानियां।',
+    'events.title':'सांस्कृतिक आयोजन और त्योहार',
+    'events.sub':'पूरे भारत के त्योहार, राज्य के अनुसार फ़िल्टर करने योग्य।',
+    'community.title':'अपनी विरासत जोड़ें',
+    'community.sub':'कोई परंपरा, शिल्प, त्योहार या मौखिक इतिहास जो अभी यहां दर्ज नहीं है? उसे सबमिट करें — हर योगदान प्रकाशित होने से पहले सत्यापन की प्रतीक्षा में जाता है।',
+    'dashboard.title':'डिजिटल संरक्षण, मापा गया',
+    'dashboard.sub':'BharatVerse भारत की विरासत के दस्तावेज़ीकरण और संरक्षण को कैसे ट्रैक करता है। आंकड़े उपलब्ध होने पर बैकएंड से लाइव लिए जाते हैं।',
+  }
+};
+function applyUILanguage(code){
+  const isFallback = (code === 'বাং' || code === 'தமி');
+  const dict = code === 'हिं' ? UI_TRANSLATIONS.Hindi : null;
+  document.documentElement.lang = code === 'हिं' ? 'hi' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(!el.dataset.i18nEn) el.dataset.i18nEn = el.innerHTML; // cache original English once
+    el.innerHTML = (dict && dict[key]) ? dict[key] : el.dataset.i18nEn;
+  });
+  if(isFallback && !window._bvLangNoticeShown){
+    window._bvLangNoticeShown = true;
+    alert('Bengali (বাং) and Tamil (தமி) translations are still being written — showing English for now.');
+  }
+  try{ localStorage.setItem('bharatverse_ui_lang', code); }catch{}
+}
+function initLangSwitcher(){
+  const sel = document.getElementById('navLangSelect');
+  if(!sel) return;
+  let saved = 'EN';
+  try{ saved = localStorage.getItem('bharatverse_ui_lang') || 'EN'; }catch{}
+  sel.value = saved;
+  applyUILanguage(saved);
+  sel.addEventListener('change', ()=> applyUILanguage(sel.value));
+}
+
+function rangoliSVG(){
+  return `<svg viewBox="0 0 100 100">
+    <g fill="none" stroke="var(--maroon)" stroke-width="1.4">
+      <circle cx="50" cy="50" r="10"/>
+      <circle cx="50" cy="50" r="30" stroke-dasharray="3 5"/>
+      ${[0,45,90,135,180,225,270,315].map(a=>`<path d="M50 50 L${50+34*Math.cos(a*Math.PI/180)} ${50+34*Math.sin(a*Math.PI/180)}" stroke="var(--saffron)"/>`).join("")}
+      ${[0,60,120,180,240,300].map(a=>`<circle cx="${50+22*Math.cos(a*Math.PI/180)}" cy="${50+22*Math.sin(a*Math.PI/180)}" r="3" fill="var(--gold)" stroke="none"/>`).join("")}
+    </g>
+  </svg>`;
+}
+document.querySelectorAll('.rangoli-mark').forEach(el=>el.innerHTML=rangoliSVG());
+
+/* Hero decorative art */
+/* Live culture & heritage hero carousel */
+/* The old stylised India silhouette map background has been replaced by
+   a real Leaflet GIS map (see initLeafletMap() below), built from real
+   state/UT boundary data served at GET /api/states/geojson. */
+
+const HERITAGE_IMAGES = {
+  baidyanath:{name:"Baba Baidyanath Dham",state:"Jharkhand",category:"Temple · Deoghar",image:"https://ghumakkadi.com/media/deoghar-jharkhand_63855.jpg",desc:"One of Jharkhand's most important pilgrimage and heritage complexes."},
+  amber:{name:"Amber Fort",state:"Rajasthan",category:"Fort · Jaipur",image:"https://sightseeingcabinjaipur.com/img/jaipur-darshan-slider-img-1.jpg",desc:"A grand Rajput-Mughal hill fort overlooking Jaipur."},
+  modhera:{name:"Modhera Sun Temple",state:"Gujarat",category:"Temple · Heritage",image:"https://www.lifeberrys.com/img/article/modhera-sun-temple-1615542352-lb.jpg",desc:"An 11th-century Sun temple celebrated for its architecture and solar design."},
+  victoria:{name:"Victoria Memorial",state:"West Bengal",category:"Monument · Kolkata",image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/2013-Kolkata-Victoria-Memorial-106.JPG",desc:"A landmark museum and monument in the heart of Kolkata."},
+  konark:{name:"Konark Sun Temple",state:"Odisha",category:"Temple · UNESCO World Heritage",image:"https://www.tusktravel.com.mx/blog/wp-content/uploads/2020/07/Konarak-sun-Temple-1.jpg",desc:"A monumental Kalinga temple conceived as the chariot of Surya."},
+  jagannath:{name:"Jagannath Temple",state:"Odisha",category:"Temple · Puri",image:"https://cdn.triptotemples.com/packages/67c978a93e859b72b3836c36-jagganath-puri2.jpeg",desc:"A major pilgrimage centre and living tradition of Odisha."},
+  ajanta:{name:"Ajanta Caves",state:"Maharashtra",category:"Rock-cut Heritage · UNESCO",image:"https://i.pinimg.com/originals/e5/dd/b0/e5ddb0771397b5d855c4537e938d325c.jpg",desc:"Ancient rock-cut Buddhist caves known for sculpture and murals."},
+  padmanabhaswamy:{name:"Padmanabhaswamy Temple",state:"Kerala",category:"Temple · Thiruvananthapuram",image:"https://trivanax.com/uploads/destinations/padmanabhaswamy-temple/hero.jpg",desc:"A distinctive Kerala temple complex with a monumental gopuram."},
+  brihadeeswarar:{name:"Brihadeeswarar Temple",state:"Tamil Nadu",category:"Temple · Chola Heritage",image:"https://upload.wikimedia.org/wikipedia/commons/2/20/Brihadeeswarar_Temple_view_1.JPG",desc:"A monumental Chola temple with an intricately carved vimana."},
+  sanchi:{name:"Sanchi Stupa",state:"Madhya Pradesh",category:"Buddhist Heritage · UNESCO",image:"https://www.soil2soulexpeditions.com/admin/public/images/blog/image_file/235/Bhopalspiritualpalce.png",desc:"An ancient Buddhist monument known for its carved gateways."},
+  sirpur:{name:"Laxman Temple, Sirpur",state:"Chhattisgarh",category:"Temple · Archaeological Heritage",image:"https://images.moneycontrol.com/static-mcnews/2025/10/20251010053227_Chhattisgarhs-iconic-Laxman-Temple-at-Sirpur-a-marvel-in-red-brick.jpg",desc:"A remarkable red-brick temple within Sirpur's archaeological landscape."},
+  golden:{name:"Golden Temple",state:"Punjab",category:"Gurdwara · Amritsar",image:"https://newit.com.br/wp-content/uploads/2025/01/pacote-india-triangulo-dourado-e-ganges-4.jpg",desc:"Harmandir Sahib, surrounded by the sacred Amrit Sarovar."},
+  pinjore:{name:"Yadavindra Gardens, Pinjore",state:"Haryana",category:"Mughal Garden · Heritage",image:"https://cdn1.tripoto.com/media/filter/nl/img/2380291/Image/1697084366_untitled_design_32_jpg.jpg.webp",desc:"A historic seven-terraced Mughal garden in the Shivalik foothills."},
+  hidimba:{name:"Hidimba Temple",state:"Himachal Pradesh",category:"Temple · Manali",image:"https://www.hirenride.com/_next/image?q=75&url=%2F_next%2Fstatic%2Fmedia%2Fhidimba-temple-manali.b342949d.jpg&w=3840",desc:"A distinctive timber temple set among the cedar forests of Manali."},
+  kedarnath:{name:"Kedarnath Temple",state:"Uttarakhand",category:"Temple · Himalayan Heritage",image:"https://images.unsplash.com/photo-1590050752117-238cb0fb1c7a?auto=format&fit=crop&w=1200&q=80",desc:"A historic Himalayan shrine framed by the high mountains."},
+  mahbodhi:{name:"Mahabodhi Temple",state:"Bihar",category:"Buddhist Heritage · UNESCO",image:"https://media3.thrillophilia.com/filestore/jltbx5xnp19lmbkhn03sz6zu8com_1628848989_1-Mahabodhi-Temple_Gaya_80x60_inches.png",desc:"The Buddhist temple complex at Bodh Gaya associated with enlightenment."},
+  taj:{name:"Taj Mahal",state:"Uttar Pradesh",category:"Monument · UNESCO World Heritage",image:"https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",desc:"Agra's iconic marble monument and one of India's best-known heritage sites."},
+  redfort:{name:"Red Fort",state:"Delhi",category:"Fort · UNESCO World Heritage",image:"https://img.avianexperiences.com/trek/45e80f29-86ee-417e-ba19-5f38e3a134da",desc:"A Mughal-era red sandstone fort at the heart of Old Delhi."},
+  bomjesus:{name:"Basilica of Bom Jesus",state:"Goa",category:"Church · UNESCO World Heritage",image:"https://www.viajecomigo.com/wp-content/uploads/2018/02/Fachada-Basilica-do-Bom-Jesus-Goa-India-%C2%A9-Viaje-Comigo.jpg",desc:"A historic basilica in Old Goa with distinctive Baroque architecture."},
+  hampi:{name:"Virupaksha Temple, Hampi",state:"Karnataka",category:"Temple · UNESCO World Heritage",image:"https://www.thehistoryhub.com/wp-content/uploads/2014/04/Virupaksha-Temple-of-Hampi.jpg",desc:"A living temple within the monumental landscape of Hampi."},
+  tirupati:{name:"Sri Venkateswara Temple",state:"Andhra Pradesh",category:"Temple · Tirumala",image:"https://www.beyondyatra.com/assets/images/imgtg/tirupati/pv/sri_venkateswara_swamy_temple_%28tirumala_tirupathi_devasthanam%29_tirupati_andhra_pradesh_india.jpg",desc:"A major pilgrimage temple set among the hills of Tirumala."},
+  charminar:{name:"Charminar",state:"Telangana",category:"Monument · Hyderabad",image:"https://www.tusktravel.com/blog/wp-content/uploads/2020/12/Charminar-Hyderabad-768x576.jpg",desc:"Hyderabad's iconic four-minaret monument and historic city landmark."},
+  kamakhya:{name:"Kamakhya Temple",state:"Assam",category:"Temple · Guwahati",image:"https://www.meghalayatourcabs.com/wp-content/uploads/2019/05/Kamakhya-Temple-Assam-Tourist-Destinations.jpg",desc:"A major Shakti shrine on Nilachal Hill in Guwahati."},
+  livingroots:{name:"Living Root Bridges",state:"Meghalaya",category:"Living Heritage · Khasi Hills",image:"https://indiano.travel/wp-content/uploads/2022/04/Living-root-bridge-of-Mawlynnong-in-Meghalaya.jpg",desc:"Living bridges shaped from tree roots, reflecting indigenous ecological knowledge."},
+  kohima:{name:"Kohima War Cemetery",state:"Nagaland",category:"Memorial · Heritage",image:"https://holaciti.com/assets/place/1764869094place.webp",desc:"A historic memorial landscape in the hills of Nagaland."},
+  mizoram:{name:"Solomon's Temple",state:"Mizoram",category:"Religious Heritage · Aizawl",image:"https://static.toiimg.com/thumb/msid-84244923,width-748,height-499,resizemode-4,imgsize-894620/Mizorams-must-visit-destinations.jpg",desc:"A prominent architectural landmark in Aizawl."},
+  tripura:{name:"Ujjayanta Palace",state:"Tripura",category:"Palace · Agartala",image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Ujjayanta%20Palace.jpg",desc:"The former royal palace of Tripura, surrounded by formal gardens."},
+  sikkim:{name:"Rumtek Monastery",state:"Sikkim",category:"Monastery · Gangtok",image:"https://www.shrineyatra.com/wp-content/uploads/2022/03/Best-Monastery-in-Sikkim-1.jpg",desc:"A major Tibetan Buddhist monastery in the hills near Gangtok."},
+  arunachal:{name:"Tawang Monastery",state:"Arunachal Pradesh",category:"Monastery · Tawang",image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Tawang%20Monastery.jpg",desc:"A major Himalayan Buddhist monastery overlooking Tawang Valley."}
+};
+
+const HERO_CULTURE_IMAGES = [
+  {name:"Konark Sun Temple", place:"Odisha", category:"Temple Heritage", image:HERITAGE_IMAGES?.konark?.image},
+  {name:"Brihadeeswarar Temple", place:"Tamil Nadu", category:"Temple Heritage", image:HERITAGE_IMAGES?.brihadeeswarar?.image},
+  {name:"Hampi Heritage", place:"Karnataka", category:"Living Heritage", image:HERITAGE_IMAGES?.hampi?.image},
+  {name:"Sohrai Art", place:"Jharkhand", category:"Tribal Art", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sohrai_art.jpg/800px-Sohrai_art.jpg"},
+  {name:"Madhubani Painting", place:"Bihar", category:"Folk Art", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Madhubani_painting.jpg/800px-Madhubani_painting.jpg"},
+  {name:"Phulkari Embroidery", place:"Punjab", category:"Traditional Craft", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Phulkari.jpg/800px-Phulkari.jpg"},
+  {name:"Kathakali", place:"Kerala", category:"Classical Performance", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Kathakali_Performer.jpg/800px-Kathakali_Performer.jpg"},
+  {name:"Golden Temple", place:"Punjab", category:"Cultural Heritage", image:HERITAGE_IMAGES?.golden?.image}
+];
+
+const heroSlides = (typeof HERO_CULTURE_IMAGES !== 'undefined' ? HERO_CULTURE_IMAGES : []).filter(x=>x && x.image);
+const heroArt = document.getElementById('heroArt');
+if(heroArt && heroSlides.length){
+  heroArt.innerHTML = `
+    <div class="live-heritage-visual" aria-label="Live culture and heritage carousel">
+      <div class="heritage-photo-frame">
+        ${heroSlides.map((x,i)=>`<figure class="heritage-slide ${i===0?'active':''}" data-index="${i}">
+          <img src="${x.image}" alt="${x.name}, ${x.place}" loading="${i===0?'eager':'lazy'}">
+          <figcaption><span>${x.category}</span><strong>${x.name}</strong><small>${x.place}</small></figcaption>
+        </figure>`).join('')}
+        <div class="heritage-live-badge"><i></i> LIVE CULTURE & HERITAGE</div>
+        <button type="button" class="hero-slide-btn hero-prev" aria-label="Previous image">‹</button>
+        <button type="button" class="hero-slide-btn hero-next" aria-label="Next image">›</button>
+        <div class="heritage-dots" aria-label="Choose heritage image">
+          ${heroSlides.map((_,i)=>`<button type="button" class="heritage-dot ${i===0?'active':''}" data-slide="${i}" aria-label="Show image ${i+1}"></button>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  (function(){
+    const slides=[...heroArt.querySelectorAll('.heritage-slide')], dots=[...heroArt.querySelectorAll('.heritage-dot')];
+    let current=0,timer=null;
+    const show=i=>{current=(i+slides.length)%slides.length;slides.forEach((e,n)=>e.classList.toggle('active',n===current));dots.forEach((e,n)=>e.classList.toggle('active',n===current));};
+    const start=()=>{clearInterval(timer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)timer=setInterval(()=>show(current+1),4000);};
+    heroArt.querySelector('.hero-prev').addEventListener('click',()=>{show(current-1);start();});
+    heroArt.querySelector('.hero-next').addEventListener('click',()=>{show(current+1);start();});
+    dots.forEach(d=>d.addEventListener('click',()=>{show(Number(d.dataset.slide));start();}));
+    heroArt.addEventListener('mouseenter',()=>clearInterval(timer));
+    heroArt.addEventListener('mouseleave',start);
+    start();
+  })();
+}
+
+
+
+const STATE_HERITAGE = {
+  Jharkhand:"baidyanath", Rajasthan:"amber", Gujarat:"modhera", "West Bengal":"victoria", Odisha:"konark",
+  Maharashtra:"ajanta", Kerala:"padmanabhaswamy", "Tamil Nadu":"brihadeeswarar", Assam:"kamakhya", Punjab:"golden",
+  Haryana:"pinjore", "Himachal Pradesh":"hidimba", Uttarakhand:"kedarnath", "Uttar Pradesh":"taj", Bihar:"mahbodhi",
+  "Madhya Pradesh":"sanchi", Chhattisgarh:"sirpur", Goa:"bomjesus", Karnataka:"hampi", "Andhra Pradesh":"tirupati",
+  Telangana:"charminar", Meghalaya:"livingroots", Nagaland:"kohima", Mizoram:"mizoram", Tripura:"tripura",
+  Sikkim:"sikkim", "Arunachal Pradesh":"arunachal", Delhi:"redfort"
+};
+
+
+/* ===== CATEGORY-SPECIFIC CULTURAL IMAGES ===== */
+const CULTURAL_IMAGES = {
+  "Sohrai Art":"https://www.iasgyan.in/ig-uploads/images/image0392.jpg",
+  "Madhubani Painting":"https://miro.medium.com/v2/resize%3Afit%3A1400/1%2Am5xfOOGV5C6diDFib3rCTQ.jpeg",
+  "Pattachitra":"https://premlathasinternational.com/storage/2024/02/odisha_pattachitra.jpeg",
+  "Warli Painting":"https://www.artzolo.com/cdn/shop/files/warli-art-25-artzolo-com.jpg?v=1715694654&width=800",
+  "Gond Painting":"https://d35l77wxi0xou3.cloudfront.net/opencart/image/productFromFeb2020/1647874469-600x600.png",
+  "Tanjore Painting":"https://i.pinimg.com/736x/6f/1c/44/6f1c44f3125d296f88fa0f855bf00d03.jpg",
+  "Phulkari Embroidery":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Pulkari%20embroidery%20of%20Punjab.jpg",
+  "Patola Weaving":"https://ruralindiaonline.org/_next/image?q=75&url=https%3A%2F%2Fproduction.ruralindiaonline.org%2Fuploads%2F013_IMG_7703_US_Picking_up_the_threads_of_patola_US_Picking_up_the_threads_b8ee3398b7.jpg&w=1080",
+  "Sambalpuri Ikat Weaving":"https://priyaodisha.com/cdn/shop/articles/ikat-weaving-process-sambalpuri-sarees_1.jpg",
+  "Bihu Dance":"https://www.gosahin.com/uploads/places/bihu-folk-dance-assam.jpg",
+  "Kathakali":"https://www.sreestours.com/wp-content/uploads/2020/05/Kathakali-2.jpg",
+  "Odissi":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Odissi%20Dance%20performance.jpg",
+  "Bharatanatyam":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Bharata%20Natyam%20Performance%20DS.jpg",
+  "Lavani":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Lavani.jpg",
+  "Chhau Dance":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Chhau%20Dancers.jpg",
+  "Bhangra":"https://files.prokerala.com/news/photos/imgs/1024/punjab-police-personnel-ncc-cadets-and-students-1767052.jpg",
+  "Yakshagana":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Yakshagana.jpg",
+  "Cheraw (Bamboo Dance)":"https://www.artistmanagementcompanies.in/danceforms/image/cheraw-dance-m3.jpg",
+  "Manipuri Ras Lila":"https://imphalreviews.in/wp-content/uploads/2021/11/Ras-Lila.jpg",
+  "Bandhani Tie-Dye":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Bandhani.jpg",
+  "Blue Pottery":"https://i0.wp.com/www.tusktravel.com/blog/wp-content/uploads/2021/09/Blue-Pottery-Jaipur-Rajasthan.jpg?resize=800%2C499&ssl=1",
+  "Kantha Embroidery":"https://www.rugrabbit.com/sites/default/files/imagecache/big/kutch_arts/25-2019/more_images/dsc06354.jpg",
+  "Khovar Marriage Art":"https://media.worldofinteriors.com/photos/647738fda438268307d4ed90/4%3A3/w_4724%2Ch_3543%2Cc_limit/1.jpg",
+  "Coir Weaving":"https://aquablissresortalappuzha.blogspot.com/2019/05/coir-weaving-in-alleppey.html",
+  "Muga Silk Weaving":"https://assamstory.com/wp-content/uploads/2023/11/Sualkuchi-Silk-Farm.jpg",
+  "Chamba Rumal Embroidery":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Chamba%20Rumal%20.jpg",
+  "Bidriware Metalwork":"https://iheartindian.wordpress.com/wp-content/uploads/2023/11/image-14.png",
+  "Pochampally Ikat Weaving":"https://upload.wikimedia.org/wikipedia/commons/b/b4/Saree_Weaving_by_Handloom_2.jpg",
+  "Nirmal Painting & Toys":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Nirmal%20Painting.jpg",
+  "Aipan Floor Art":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Aipan%20folk%20art.jpg",
+  "Zardozi Embroidery":"https://blogmedia.oaklores.com/uploads/2024/09/hhjjhh-jpg-500x500.jpg.webp",
+  "Mysore Painting":"https://www.dsource.in/sites/default/files/resource/mysore-painting/mysore-painting-process/minigallery/5853/pro-13.jpg",
+  "Naga Shawl Weaving":"https://images.herzindagi.info/her-zindagi-hindi/images/2024/11/08/template/image/NAGA-SHAWLS-1731065904239.jpg",
+  "Thangka Painting":"https://images.squarespace-cdn.com/content/v1/56c462e37da24f9466fa8ed8/1630328903979-9V3AHK5BOP47CQ9FNWH2/unnamed%2B%281%29.jpg",
+  "Phad Painting":"https://caleidoscope.in/wp-content/uploads/2020/07/Vijay-Joshi-Traditional-Phad-Artist--scaled.jpg"
+};
+
+const STATE_ART_IMAGES = {
+  "Jharkhand":"Sohrai Art", "Bihar":"Madhubani Painting", "Odisha":"Pattachitra",
+  "Maharashtra":"Warli Painting", "Madhya Pradesh":"Gond Painting", "Tamil Nadu":"Tanjore Painting",
+  "Punjab":"Phulkari Embroidery", "Gujarat":"Patola Weaving", "Assam":"Bihu Dance", "Kerala":"Kathakali"
+};
+
+function culturalImage(label, cls="") {
+  const url=CULTURAL_IMAGES[label];
+  if(!url) return '';
+  return `<img class="${cls}" src="${url}" alt="${label}" loading="lazy" onerror="this.style.display='none'">`;
+}
+function culturalForState(state){ const key=STATE_ART_IMAGES[state]; return key ? CULTURAL_IMAGES[key] : null; }
+const CATEGORY_FALLBACKS={Painting:CULTURAL_IMAGES["Madhubani Painting"],"Scroll Painting":CULTURAL_IMAGES["Pattachitra"],"Dance-Drama":CULTURAL_IMAGES["Kathakali"],"Folk Dance":CULTURAL_IMAGES["Bihu Dance"],"Ritual Art":CULTURAL_IMAGES["Madhubani Painting"],"Textile Art":CULTURAL_IMAGES["Patola Weaving"],Textile:CULTURAL_IMAGES["Phulkari Embroidery"],"Metal Craft":CULTURAL_IMAGES["Gond Painting"],Craft:CULTURAL_IMAGES["Patola Weaving"],Ceramic:CULTURAL_IMAGES["Patola Weaving"]};
+function culturalForCategory(category,state){ return culturalForState(state) || CATEGORY_FALLBACKS[category] || null; }
+
+function heritageImage(key, cls=""){
+  const h=HERITAGE_IMAGES[key];
+  if(!h) return '';
+  return `<img class="${cls}" src="${h.image}" alt="${h.name}, ${h.state}" loading="lazy" onerror="this.parentElement?.classList.add('image-missing'); this.style.display='none'">`;
+}
+function heritageForState(state){ return HERITAGE_IMAGES[STATE_HERITAGE[state]] || null; }
+
+
+function renderHeritageShowcase(){
+  const h=HERITAGE_IMAGES;
+  document.getElementById('heritageShowcase').innerHTML=`
+    <article class="heritage-feature" data-heritage="konark">
+      ${heritageImage('konark')}
+      <div class="heritage-feature-content"><div class="eyebrow" style="color:var(--saffron-soft)">${h.konark.category}</div><h3>${h.konark.name}</h3><p>${h.konark.desc}</p></div>
+    </article>
+    <div class="heritage-mini-grid">
+      ${['jagannath','amber','brihadeeswarar','hampi'].map(k=>`<article class="heritage-mini" data-heritage="${k}">${heritageImage(k)}<div class="image-overlay"><strong>${h[k].name}</strong><div style="font-size:10px;opacity:.82;margin-top:2px">${h[k].state}</div></div></article>`).join('')}
+    </div>`;
+}
+
+/* =========================================================
+   RENDER HELPERS
+   ========================================================= */
+function mediaSwatch(label, tone){
+  const tones = {maroon:"var(--maroon)",green:"var(--green)",saffron:"var(--saffron)",gold:"var(--gold)"};
+  return `<div class="swatch" style="background:${tones[tone]||tones.maroon}">${label}</div>`;
+}
+
+function renderRegions(){
+  const regionImages={"North India":"amber","West India":"modhera","East India":"konark","Central India":"sanchi","South India":"brihadeeswarar","Northeast India":"sikkim"};
+  document.getElementById('regionGrid').innerHTML = REGIONS.map(r=>{const k=regionImages[r.name];return `
+    <div class="region-card" data-region="${r.name}" style="padding:0;overflow:hidden;">
+      <div class="image-card-media">${heritageImage(k)}<div class="image-overlay"><strong>${r.name}</strong></div></div>
+      <div style="padding:16px 18px;"><span>${r.desc}</span></div>
+    </div>`;}).join("");
+}
+
+function renderFeatured(){
+  document.getElementById('featuredGrid').innerHTML = TRADITIONS.slice(0,4).map((t)=>{
+    const img=CULTURAL_IMAGES[t.name] || culturalForCategory(t.category,t.state);
+    return `<div class="card" data-tradition="${t.id}">
+      <div class="image-card-media">${img?`<img src="${img}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`:mediaSwatch(t.name,"maroon")}</div>
+      <div class="card-body"><div class="tag">${t.state} · ${t.category}</div><h4>${t.name}</h4><p>${t.significance.slice(0,70)}…</p></div>
+    </div>`;
+  }).join("");
+}
+
+function renderCrafts(){
+  document.getElementById('craftGrid').innerHTML = CRAFTS.map((c)=>{
+    const img=CULTURAL_IMAGES[c.name] || culturalForCategory(c.category,c.state);
+    return `<div class="card" data-craft="${c.id}">
+      <div class="image-card-media">${img?`<img src="${img}" alt="${c.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`:mediaSwatch(c.name,"green")}</div>
+      <div class="card-body"><div class="tag">${c.state}</div><h4>${c.name}</h4><p>${c.category} craft, hand-made using techniques passed through generations.</p></div>
+    </div>`;
+  }).join("");
+}
+
+function renderDances(){
+  document.getElementById('danceGrid').innerHTML = DANCES.map((d,i)=>{
+    const img=CULTURAL_IMAGES[d.name] || culturalForCategory("Folk Dance",d.state);
+    return `<div class="card" style="background:rgba(246,240,227,0.06);border-color:rgba(246,240,227,0.16);" data-dance="${d.id}">
+      <div class="image-card-media">${img?`<img src="${img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`:mediaSwatch(d.name,["saffron","gold","maroon"][i%3])}</div>
+      <div class="card-body"><div class="tag">${d.state}</div><h4 style="color:var(--ivory);">${d.name}</h4><p style="color:rgba(246,240,227,0.65);">${d.desc}</p></div>
+    </div>`;
+  }).join("");
+}
+
+function renderStories(){
+  document.getElementById('storyGrid').innerHTML = STORIES.map((s,i)=>{
+    const stateMap={"Jharkhand":"Jharkhand","Rajasthan":"Rajasthan","Odisha":"Odisha","Meghalaya":"Meghalaya","Kerala":"Kerala"};
+    const state=stateMap[s.place]; const k=STATE_HERITAGE[state];
+    return `<div class="card" data-story="${s.id}"><div class="image-card-media">${k?heritageImage(k):mediaSwatch("Story",["maroon","green","gold"][i%3])}</div><div class="card-body"><div class="tag">${s.place}</div><h4>${s.title}</h4><p>${s.excerpt}</p></div></div>`;
+  }).join("");
+}
+
+function renderArtisans(){
+  document.getElementById('artisanList').innerHTML = `<div class="grid grid-2">` + ARTISANS.map((a,i)=>{
+    const state=(a.location||"").split(',').pop().trim(); const craftKey = ({"Sohrai Wall Painting":"Sohrai Art","Phad Scroll Painting":"Phad Painting","Pattachitra Painting":"Pattachitra","Kathakali Mask & Makeup":"Kathakali","Madhubani Painting":"Madhubani Painting","Phulkari Embroidery":"Phulkari Embroidery"})[a.craft]; const craftImg=CULTURAL_IMAGES[craftKey] || culturalForState(state);
+    return `<div class="card" data-artisan="${a.id}" style="display:flex;">
+      <div style="width:110px;flex-shrink:0;">${craftImg?`<img src="${craftImg}" alt="${a.craft}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`:mediaSwatch(a.name.split(" ")[0],["maroon","green","gold","saffron"][i%4])}</div>
+      <div class="card-body" style="flex:1;">
+        <div class="tag">${a.craft}</div>
+        <h4>${a.name}</h4>
+        <p>${a.location} · ${a.years} yrs experience</p>
+        <button class="btn btn-outline btn-sm" style="margin-top:12px;">Explore Craft →</button>
+      </div>
+    </div>`;
+  }).join("") + `</div>`;
+}
+
+function renderEvents(activeState){
+  const filters = ["All", ...Object.keys(STATES)];
+  document.getElementById('eventFilters').innerHTML = filters.map(f=>`
+    <button class="filter-pill ${(!activeState&&f==='All')||activeState===f?'active':''}" data-filter="${f}">${f}</button>`).join("");
+  const list = (!activeState||activeState==='All') ? EVENTS : EVENTS.filter(e=>e.state===activeState);
+  document.getElementById('eventList').innerHTML = list.map(e=>`
+    <div class="event-card" data-event="${e.id}">
+      <div class="event-date"><b>${e.day}</b><span>${e.month}</span></div>
+      <div class="event-info">
+        <h4>${e.name}</h4>
+        <p>${e.desc}</p>
+        <div class="event-tags"><span class="chip">${e.state}</span><span class="chip">${e.loc}</span></div>
+      </div>
+      <button class="btn btn-outline btn-sm">Explore →</button>
+    </div>`).join("") || `<p style="color:var(--ink-soft);font-size:14px;">No events found for this state.</p>`;
+}
+
+/* renderStatePins() removed — state selection now driven by clicking real
+   GeoJSON boundary polygons in initLeafletMap() below. */
+
+async function renderKPICharts(){
+  let data = null;
+  try{ data = await bvFetch('/dashboard'); }catch{ /* fall through to static prototype numbers already in the HTML */ }
+
+  const badge = document.getElementById('dashboardBadge');
+
+  if(data){
+    badge.textContent = 'Live';
+    badge.style.background = 'rgba(31,75,63,0.18)'; badge.style.color = 'var(--green)';
+    document.getElementById('kpiHeritage').textContent = data.totalHeritage.toLocaleString();
+    document.getElementById('kpiAssets').textContent = data.digitizedAssets.toLocaleString();
+    document.getElementById('kpiArtisans').textContent = data.artisanProfiles.toLocaleString();
+    document.getElementById('kpiStates').textContent = `${data.statesCovered} / 29`;
+
+    const total = Object.values(data.healthDistribution).reduce((a,b)=>a+b,0) || 1;
+    const donutSegs = [
+      {label:"Stable", pct: Math.round(data.healthDistribution.stable/total*100), color:"var(--green)"},
+      {label:"Vulnerable", pct: Math.round(data.healthDistribution.vulnerable/total*100), color:"var(--saffron)"},
+      {label:"At risk", pct: Math.round(data.healthDistribution.at_risk/total*100), color:"var(--maroon)"},
+      {label:"Unassessed", pct: Math.round(data.healthDistribution.unassessed/total*100), color:"var(--ink-soft)"},
+    ];
+    let acc=0;
+    const stops = donutSegs.map(s=>{const start=acc; acc+=s.pct; return `${s.color} ${start}% ${acc}%`;}).join(",");
+    document.getElementById('donutChart').style.background = `conic-gradient(${stops})`;
+    document.getElementById('donutLegend').innerHTML = donutSegs.map(s=>`
+      <div><span class="sw" style="background:${s.color}"></span>${s.label} — ${s.pct}%</div>`).join("");
+
+    document.getElementById('recentList').innerHTML = (data.recentRecords||[]).length
+      ? data.recentRecords.map(r=>`<div class="recent-row"><div>${r.name}</div><span>${r.state} · ${(r.healthStatus||'unassessed').replace('_',' ')}</span></div>`).join("")
+      : `<div class="result-empty" style="padding:20px;">No records yet — be the first to Add Your Heritage.</div>`;
+
+    const stateNames = Object.keys(STATES);
+    const barData = stateNames.slice(0,10).map(name=>({label:name, v: 20 + (name.length*3)%35 }));
+    const max = Math.max(...barData.map(d=>d.v));
+    document.getElementById('barChart').innerHTML = barData.map(d=>`
+      <div class="col"><div class="b" data-h="${(d.v/max*100).toFixed(0)}" style="height:0;"></div><label>${d.label}</label></div>`).join("");
+    return;
+  }
+
+  // ---- Fallback: backend/database unavailable — use the static prototype
+  // numbers already in the HTML, clearly labelled, never presented as live. ----
+  badge.textContent = 'Prototype Dataset — backend unavailable';
+  const stateNames = Object.keys(STATES);
+  const barData = stateNames.slice(0,10).map(name=>({label:name, v: 20 + (name.length*3)%35 }));
+  const max = Math.max(...barData.map(d=>d.v));
+  document.getElementById('barChart').innerHTML = barData.map(d=>`
+    <div class="col"><div class="b" data-h="${(d.v/max*100).toFixed(0)}" style="height:0;"></div><label>${d.label}</label></div>`).join("");
+
+  const donutSegs = [
+    {label:"Actively practiced",pct:64,color:"var(--green)"},
+    {label:"Documented, declining",pct:26,color:"var(--saffron)"},
+    {label:"Endangered",pct:10,color:"var(--maroon)"},
+  ];
+  let acc=0;
+  const stops = donutSegs.map(s=>{const start=acc; acc+=s.pct; return `${s.color} ${start}% ${acc}%`;}).join(",");
+  document.getElementById('donutChart').style.background = `conic-gradient(${stops})`;
+  document.getElementById('donutLegend').innerHTML = donutSegs.map(s=>`
+    <div><span class="sw" style="background:${s.color}"></span>${s.label} — ${s.pct}%</div>`).join("");
+
+  document.getElementById('recentList').innerHTML = RECENT_RECORDS.map(r=>`
+    <div class="recent-row"><div>${r.name}</div><span>${r.tag}</span></div>`).join("");
+}
+
+function animateDashboard(){
+  document.querySelectorAll('.bar-chart .b').forEach(b=>{ b.style.height = b.dataset.h + "%"; });
+}
+
+function animateCounters(){
+  document.querySelectorAll('.counter').forEach(c=>{
+    const to = parseInt(c.dataset.to,10);
+    let cur=0; const step = Math.max(1, Math.round(to/60));
+    const t = setInterval(()=>{
+      cur += step;
+      if(cur>=to){cur=to; clearInterval(t);}
+      c.textContent = cur.toLocaleString();
+    }, 20);
+  });
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+function openModal(html){
+  document.getElementById('modalBox').innerHTML = `<button class="modal-close" id="modalCloseBtn">✕</button>` + html;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalCloseBtn').onclick = closeModal;
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+document.getElementById('modalOverlay').addEventListener('click', e=>{ if(e.target.id==='modalOverlay') closeModal(); });
+
+function traditionModal(t){
+  openModal(`
+    <div class="modal-media">${mediaSwatch(t.category,"maroon")}</div>
+    <div class="modal-content">
+      <div class="region-label">${t.state} · ${t.region}</div>
+      <h3>${t.name}</h3>
+      <div class="modal-block"><h5>History</h5><p>${t.history}</p></div>
+      <div class="modal-block"><h5>Cultural Significance</h5><p>${t.significance}</p></div>
+      <div class="modal-block"><h5>Traditional Process</h5><p>${t.process}</p></div>
+      <div class="modal-block"><h5>Materials</h5><p>${t.materials}</p></div>
+      <div class="modal-block"><h5>Related Festivals</h5><div class="chip-row">${t.festivals.map(f=>`<span class="chip">${f}</span>`).join("")}</div></div>
+      <div class="modal-block"><h5>Related Communities</h5><div class="chip-row">${t.communities.map(f=>`<span class="chip">${f}</span>`).join("")}</div></div>
+      <div class="modal-block"><h5>Audio / Video</h5>
+        <div class="media-placeholder-row">
+          <div class="media-ph">▶ Audio narration</div>
+          <div class="media-ph">▶ Video documentation</div>
+        </div>
+      </div>
+      <div class="modal-block"><h5>Related Traditions</h5>
+        <div class="chip-row">${TRADITIONS.filter(x=>x.id!==t.id && x.region===t.region).map(x=>`<span class="chip clickable" data-tradition-link="${x.id}">${x.name}</span>`).join("") || "<span class='chip'>None listed</span>"}</div>
+      </div>
+    </div>`);
+  document.querySelectorAll('[data-tradition-link]').forEach(el=>{
+    el.onclick = ()=>{ const tr = TRADITIONS.find(x=>x.id===el.dataset.traditionLink); if(tr) traditionModal(tr); };
+  });
+}
+
+function artisanModal(a){
+  openModal(`
+    <div class="modal-media">${mediaSwatch(a.name.split(" ")[0],"green")}</div>
+    <div class="modal-content">
+      <div class="region-label">${a.craft} <span class="demo-badge">Demo data</span></div>
+      <h3>${a.name}</h3>
+      <p style="color:var(--ink-soft);font-size:13px;margin-top:4px;">${a.location} · ${a.years} years of experience · ${a.community}</p>
+      <div class="modal-block"><h5>Their Story</h5><p>${a.story}</p></div>
+      <div class="modal-block"><h5>Craft Process</h5><p>${a.process}</p></div>
+      <div class="modal-block"><h5>Community</h5><div class="chip-row"><span class="chip">${a.community}</span></div></div>
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;">Explore ${a.craft} →</button>
+    </div>`);
+}
+
+function eventModal(e){
+  openModal(`
+    <div class="modal-media">${mediaSwatch(e.state,"saffron")}</div>
+    <div class="modal-content">
+      <div class="region-label">${e.state}</div>
+      <h3>${e.name}</h3>
+      <p style="color:var(--ink-soft);font-size:13px;margin-top:4px;">${e.date} · ${e.loc}</p>
+      <div class="modal-block"><h5>Cultural Significance</h5><p>${e.desc}</p></div>
+    </div>`);
+}
+
+function genericModal(title,sub,desc){
+  openModal(`
+    <div class="modal-media">${mediaSwatch(title,"gold")}</div>
+    <div class="modal-content">
+      <div class="region-label">${sub}</div>
+      <h3>${title}</h3>
+      <div class="modal-block"><p>${desc}</p></div>
+    </div>`);
+}
+
+/* =========================================================
+   MAP INTERACTION — real Leaflet GIS map
+   Boundaries come from GET /api/states/geojson (real GADM-derived
+   data — see backend/controllers/states.controller.js). Markers come
+   from GET /api/heritage, /api/artisans and /api/events. If the
+   backend is unreachable, the map shows an honest empty state instead
+   of a fake or randomly-generated boundary.
+   ========================================================= */
+let leafletMapInstance = null;
+let stateLayerByName = {};
+let stateCentroids = {};
+
+// Some GeoJSON boundary names differ slightly from the frontend's STATES
+// object keys (both are real names — this just reconciles casing/dataset
+// differences, it does not invent or relabel any boundary).
+function normalizeGeoStateName(geoName){
+  const aliases = { "Orissa":"Odisha", "Uttaranchal":"Uttarakhand" };
+  return aliases[geoName] || geoName;
+}
+
+function mapStyleForState(){
+  return { fillColor:"#EFE6D3", fillOpacity:0.9, color:"#7A1F2B", weight:1, opacity:0.55 };
+}
+function mapHoverStyle(){
+  return { fillColor:"#EFC28A", fillOpacity:0.95, color:"#7A1F2B", weight:1.6, opacity:0.9 };
+}
+function mapActiveStyle(){
+  return { fillColor:"#DE8B3C", fillOpacity:0.95, color:"#571622", weight:2, opacity:1 };
+}
+
+const HEALTH_COLORS = { stable:"#1F4B3F", vulnerable:"#DE8B3C", at_risk:"#7A1F2B", unassessed:"#8a7a68" };
+
+async function initLeafletMap(){
+  const mapEl = document.getElementById('leafletMap');
+  if(!mapEl || typeof L === 'undefined') return;
+
+  leafletMapInstance = L.map('leafletMap', {
+    zoomControl:false, minZoom:4, maxZoom:8, attributionControl:true,
+    scrollWheelZoom:true,
+  }).setView([22.9, 79.5], 4.4);
+  L.control.attribution({prefix:false}).addTo(leafletMapInstance)
+    .addAttribution('Boundaries: GADM via geohacker/india (simplified)');
+
+  let geojson;
+  try{
+    geojson = await bvFetch('/states/geojson');
+  } catch(err){
+    // Backend is unreachable — fall back to the boundaries file shipped
+    // alongside the frontend itself, so the map still renders (state
+    // outlines, tooltips, click-through to each state's local heritage
+    // profile) even with zero backend. Only the extra artisan/event
+    // marker pins (loadMapMarkers) genuinely need the live backend.
+    try{
+      const resp = await fetch('./india-states.geojson');
+      if(!resp.ok) throw new Error('local geojson fetch failed');
+      geojson = await resp.json();
+      document.getElementById('mapBackendBanner')?.classList.add('show');
+    } catch(fallbackErr){
+      document.getElementById('mapBackendBanner')?.classList.add('show');
+      document.getElementById('mapStage').insertAdjacentHTML('beforeend',
+        `<div class="map-panel-empty" style="position:absolute;inset:0;background:var(--ivory-deep);z-index:5;">
+          <h3 style="font-size:17px;">Map data unavailable</h3>
+          <p style="font-size:13px;max-width:280px;">Could not reach GET /api/states/geojson, and the local india-states.geojson fallback also failed to load.</p>
+        </div>`);
+      return;
+    }
+  }
+
+  const geoLayer = L.geoJSON(geojson, {
+    style: mapStyleForState,
+    onEachFeature: (feature, layer) => {
+      const rawName = feature.properties.st_nm;
+      const name = normalizeGeoStateName(rawName);
+      stateLayerByName[name] = layer;
+      try{ stateCentroids[name] = layer.getBounds().getCenter(); }catch{}
+
+      layer.bindTooltip(name, { sticky:true, className:'map-tooltip' });
+      layer.on('mouseover', ()=>{ if(!layer._bvActive) layer.setStyle(mapHoverStyle()); });
+      layer.on('mouseout', ()=>{ if(!layer._bvActive) layer.setStyle(mapStyleForState()); });
+      layer.on('click', ()=>{
+        Object.values(stateLayerByName).forEach(l=>{ l._bvActive=false; l.setStyle(mapStyleForState()); });
+        layer._bvActive = true; layer.setStyle(mapActiveStyle());
+        if(STATES[name]){
+          selectState(name);
+        } else {
+          document.getElementById('mapPanel').innerHTML = `
+            <div class="map-panel-empty">
+              <h3 style="font-size:19px;">${name}</h3>
+              <p style="font-size:13px;max-width:260px;">A detailed BharatVerse profile for this state/UT isn't in the prototype dataset yet — see "Add Your Heritage" to contribute one.</p>
+            </div>`;
+        }
+      });
+    }
+  }).addTo(leafletMapInstance);
+
+  try{ leafletMapInstance.fitBounds(geoLayer.getBounds(), {padding:[10,10]}); }catch{}
+
+  // Populate the state search datalist from real boundary names.
+  const datalist = document.getElementById('mapStateList');
+  if(datalist){
+    datalist.innerHTML = Object.keys(stateLayerByName).sort().map(n=>`<option value="${n}">`).join('');
+  }
+
+  await loadMapMarkers();
+}
+
+async function loadMapMarkers(){
+  const heritageLayerGroup = L.layerGroup();
+  const artisanLayerGroup = L.layerGroup();
+  const eventLayerGroup = L.layerGroup();
+
+  try{
+    const data = await bvFetch('/heritage?limit=100');
+    (data.items||[]).forEach(h=>{
+      if(!h.coordinates || h.coordinates.lat==null || h.coordinates.lng==null) return;
+      const color = HEALTH_COLORS[h.healthStatus] || HEALTH_COLORS.unassessed;
+      L.circleMarker([h.coordinates.lat, h.coordinates.lng], {
+        radius:7, color:'#2B1810', weight:1, fillColor:color, fillOpacity:0.9,
+      }).bindPopup(`<b>${h.name}</b><br>${h.state}${h.category ? ' · '+h.category : ''}<br><span style="text-transform:capitalize;">${(h.healthStatus||'unassessed').replace('_',' ')}</span> heritage health`)
+        .addTo(heritageLayerGroup);
+    });
+  } catch{ /* backend/db unavailable — simply no heritage markers, no fake data */ }
+
+  try{
+    const data = await bvFetch('/artisans');
+    (data.artisans||[]).forEach(a=>{
+      const c = stateCentroids[a.state];
+      if(!c) return;
+      const jitter = () => (Math.random()-0.5)*0.4;
+      L.circleMarker([c.lat+jitter(), c.lng+jitter()], {
+        radius:6, color:'#2B1810', weight:1, fillColor:'#B8863B', fillOpacity:0.9,
+      }).bindPopup(`<b>${a.name}</b><br>${a.craft}<br><span style="font-size:11px;color:#5C4A3D;">Location approximated to state centroid</span>`)
+        .addTo(artisanLayerGroup);
+    });
+  } catch{ /* no artisan markers if unavailable */ }
+
+  try{
+    const data = await bvFetch('/events?status=upcoming');
+    (data.events||[]).forEach(e=>{
+      const c = stateCentroids[e.state];
+      if(!c) return;
+      const jitter = () => (Math.random()-0.5)*0.4;
+      L.circleMarker([c.lat+jitter(), c.lng+jitter()], {
+        radius:6, color:'#2B1810', weight:1, fillColor:'#5C4A3D', fillOpacity:0.9,
+      }).bindPopup(`<b>${e.name}</b><br>${e.state}${e.date ? ' · '+new Date(e.date).toLocaleDateString() : ''}<br><span style="font-size:11px;color:#5C4A3D;">Prototype Event Data — location approximated</span>`)
+        .addTo(eventLayerGroup);
+    });
+  } catch{ /* no event markers if unavailable */ }
+
+  heritageLayerGroup.addTo(leafletMapInstance);
+  artisanLayerGroup.addTo(leafletMapInstance);
+  eventLayerGroup.addTo(leafletMapInstance);
+
+  L.control.layers(null, {
+    'Heritage (by health status)': heritageLayerGroup,
+    'Artisans (approx.)': artisanLayerGroup,
+    'Festivals / Events (approx.)': eventLayerGroup,
+  }, { collapsed:true, position:'topleft' }).addTo(leafletMapInstance);
+}
+
+function setupMapControls(){
+  document.getElementById('zoomInBtn')?.addEventListener('click', ()=> leafletMapInstance?.zoomIn());
+  document.getElementById('zoomOutBtn')?.addEventListener('click', ()=> leafletMapInstance?.zoomOut());
+  const resetView = ()=>{
+    if(!leafletMapInstance) return;
+    const layers = Object.values(stateLayerByName);
+    if(layers.length){
+      const group = L.featureGroup(layers);
+      leafletMapInstance.fitBounds(group.getBounds(), {padding:[10,10]});
+    } else {
+      leafletMapInstance.setView([22.9,79.5], 4.4);
+    }
+  };
+  document.getElementById('zoomResetBtn')?.addEventListener('click', resetView);
+  document.getElementById('mapResetBtn')?.addEventListener('click', resetView);
+
+  document.getElementById('mapStateSearch')?.addEventListener('change', e=>{
+    const name = e.target.value.trim();
+    const layer = stateLayerByName[name];
+    if(layer){
+      leafletMapInstance.fitBounds(layer.getBounds(), {padding:[20,20]});
+      layer.fire('click');
+    }
+  });
+
+  document.getElementById('mapSourcesLink')?.addEventListener('click', e=>{
+    e.preventDefault();
+    openModal(`<div class="modal-content">
+      <h3>Sources &amp; Methodology</h3>
+      <div class="modal-block"><h5>Data Origin</h5><p>BharatVerse prototype data comes from hand-curated seed data (labelled "Prototype Dataset"), community submissions via "Add Your Heritage", and — in a future production version — verified institutional partners.</p></div>
+      <div class="modal-block"><h5>Verification Levels</h5><p>prototype — seed/demo content · pending — submitted, not yet reviewed · community_verified — cross-checked against a public source · institution_verified — confirmed by a named institution (future scope).</p></div>
+      <div class="modal-block"><h5>Map Boundaries</h5><p>State/UT boundaries are sourced from GADM v2.8 (via the geohacker/india dataset), simplified for web display. They predate the 2014 Telangana bifurcation and the 2019 Jammu &amp; Kashmir/Ladakh reorganisation.</p></div>
+      <div class="modal-block"><h5>Prototype Limitations</h5><p>This build has no live connection to any government heritage database. AI recognition confidence and Heritage Health scores are prototype estimates, not certified figures.</p></div>
+    </div>`);
+  });
+}
+
+function selectState(name){
+  // Active-state polygon highlighting is handled inside the Leaflet click
+  // handler in initLeafletMap(); this function only renders the info panel.
+  const s = STATES[name];
+  if(!s) return;
+  const initials = name.split(" ").map(w=>w[0]).join("").slice(0,2);
+  document.getElementById('mapPanel').innerHTML = `
+    <div class="region-label">${s.region} · Capital: ${s.capital}</div>
+    <h3>${name}</h3>
+    <p style="color:var(--ink-soft);font-size:14px;margin-top:6px;">${s.highlights}</p>
+    ${STATE_HERITAGE[name] ? (()=>{const h=HERITAGE_IMAGES[STATE_HERITAGE[name]]; return `<div class="state-heritage"><img src="${h.image}" alt="${h.name}, ${name}" loading="lazy" onerror="this.style.display='none'"><div class="state-heritage-info"><b>${h.name}</b><span>${h.category}</span></div></div>`})() : ''}
+    <div class="map-panel-section"><h5>Major Traditions</h5><div class="chip-row">${s.traditions.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
+    <div class="map-panel-section"><h5>Famous Art Forms</h5><div class="chip-row">${s.artForms.map(t=>`<span class="chip clickable" data-jump-craft="${t}">${t}</span>`).join("")}</div></div>
+    <div class="map-panel-section"><h5>Festivals</h5><div class="chip-row">${s.festivals.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
+    <div class="map-panel-section"><h5>Languages</h5><div class="chip-row">${s.languages.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
+    <div class="map-panel-section"><h5>Featured Artisan</h5>
+      <div class="artisan-mini" id="mapArtisanLink"><div class="avatar">${initials}</div><div><strong style="font-size:13.5px;">${s.artisan.name}</strong><div style="font-size:12px;color:var(--ink-soft);">${s.artisan.craft}</div></div></div>
+    </div>
+    <button class="btn btn-outline btn-sm" style="margin-top:20px;" id="mapEventsBtn">View ${name} Events →</button>
+  `;
+  document.getElementById('mapEventsBtn').onclick = ()=>{
+    filterEventsByState(name);
+    document.querySelector('.event-toolbar')?.scrollIntoView({behavior:"smooth", block:"center"});
+  };
+  document.getElementById('mapArtisanLink').onclick = ()=>{
+    const found = ARTISANS.find(a=>a.name===s.artisan.name);
+    if(found) artisanModal(found); else genericModal(s.artisan.name, s.artisan.craft, `${s.artisan.name} is a featured artisan practicing ${s.artisan.craft} in ${name}. (Demo data)`);
+  };
+  document.querySelectorAll('[data-jump-craft]').forEach(el=>{
+    el.onclick = ()=>{ genericModal(el.dataset.jumpCraft, name, `${el.dataset.jumpCraft} is one of ${name}'s signature art forms, rooted in local materials and generations of technique.`); };
+  });
+}
+function filterEventsByState(state){ renderEvents(state); }
+
+/* =========================================================
+   BHARAT AI — routed through the backend (POST /api/ai/chat).
+   The frontend holds no API key and never calls a model directly —
+   see backend/services/ai.service.js for the RAG + live/demo logic.
+   ========================================================= */
+let aiLiveAvailable = null; // null = unknown, true/false once tested
+
+function setAiStatus(live){
+  const badge = document.getElementById('aiStatusBadge');
+  if(live){ badge.textContent = 'Live'; badge.className = 'ai-status live'; }
+  else { badge.textContent = 'Demo'; badge.className = 'ai-status offline'; }
+}
+
+function offlineAnswer(query){
+  const q = query.toLowerCase();
+  const hit = AI_KNOWLEDGE.find(k=>k.keys.some(key=>q.includes(key)));
+  if(hit) return {title:hit.title, text:hit.answer};
+
+  // local fallback used only if the backend itself cannot be reached at all —
+  // searches the same bundled content the rest of the page already renders from.
+  const allNamed = [
+    ...TRADITIONS.map(t=>({title:t.name, text:`${t.name} is a ${t.category.toLowerCase()} tradition from ${t.state}. ${t.significance}`})),
+    ...CRAFTS.map(c=>({title:c.name, text:`${c.name} is a traditional ${c.category.toLowerCase()} craft from ${c.state}, passed down through generations of artisan families.`})),
+    ...DANCES.map(d=>({title:d.name, text:`${d.name} is a dance tradition from ${d.state}. ${d.desc}`})),
+    ...Object.keys(STATES).map(name=>({title:name, text:`${name} (${STATES[name].region}) is known for ${STATES[name].artForms.join(", ")}. ${STATES[name].highlights}`})),
+  ];
+  const found = allNamed.find(item=>q.includes(item.title.toLowerCase()));
+  if(found) return found;
+
+  return {title:"Bharat AI", text:"I couldn't reach the BharatVerse backend just now, so this is a local fallback answer. Try asking about Sohrai Art, Madhubani painting, Odisha's dances, Gond painting, or a cultural symbol."};
+}
+
+function aiPushMessage(role, text, title, meta){
+  const log = document.getElementById('aiLog');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  let metaHtml = '';
+  if(meta && meta.sources && meta.sources.length){
+    metaHtml = `<div style="margin-top:6px;font-size:11px;color:var(--ink-soft);">Sources: ${meta.sources.join(', ')} · <span class="badge-pill">${meta.verificationStatus==='prototype' ? '⚠ Prototype Data' : '✓ ' + meta.verificationStatus.replace('_',' ')}</span></div>`;
+  }
+  div.innerHTML = (title ? `<span class="msg-title">${title}</span>` : '') + text + metaHtml;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function aiAnswer(query){
+  const lang = document.querySelector('.lang-pill.active')?.dataset.lang || "English";
+  const langMap = { English: "English", Hindi: "Hindi", Regional: "a relevant Indian regional language if inferable, else English" };
+  const log = document.getElementById('aiLog');
+  const typing = document.createElement('div');
+  typing.className='ai-typing'; typing.textContent='Bharat AI is typing…';
+  log.appendChild(typing); log.scrollTop = log.scrollHeight;
+
+  try{
+    const data = await bvFetch('/ai/chat', {
+      method: 'POST',
+      body: JSON.stringify({ message: query, language: langMap[lang] || 'English' })
+    });
+    typing.remove();
+    const isLive = data.mode === 'live';
+    if(aiLiveAvailable !== isLive){ aiLiveAvailable = isLive; setAiStatus(isLive); }
+    aiPushMessage('bot', data.answer, 'Bharat AI', { sources: data.sources, verificationStatus: data.verificationStatus });
+  } catch(err){
+    if(aiLiveAvailable !== false){ aiLiveAvailable = false; setAiStatus(false); }
+    typing.remove();
+    const ans = offlineAnswer(query);
+    aiPushMessage('bot', ans.text, ans.title);
+  }
+}
+
+function aiSend(){
+  const input = document.getElementById('aiInput');
+  const val = input.value.trim();
+  if(!val) return;
+  aiPushMessage('user', val);
+  input.value='';
+  aiAnswer(val);
+}
+
+/* =========================================================
+   ART RECOGNITION — routed through the backend (POST /api/recognition).
+   The backend never fakes a live model with Math.random(); DEMO mode
+   there is deterministic and clearly labelled. See
+   backend/services/recognition.service.js.
+   ========================================================= */
+let selectedRecogFile = null;
+
+function handleFile(file){
+  if(!file) return;
+  selectedRecogFile = file;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('previewBox').style.display='flex';
+    document.getElementById('identifyBtn').style.display='inline-flex';
+    document.getElementById('recogResult').innerHTML = `<div class="result-empty">Image ready. Click <strong>&nbsp;Identify Art&nbsp;</strong> to send it to BharatVerse's recognition service.</div>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runIdentify(){
+  if(!selectedRecogFile) return;
+  document.getElementById('recogResult').innerHTML = `<div class="spinner"></div><p style="text-align:center;color:var(--ink-soft);font-size:13px;">Analysing visual patterns…</p>`;
+
+  const form = new FormData();
+  form.append('image', selectedRecogFile);
+
+  let result, mode;
+  try{
+    result = await bvFetch('/recognition', { method:'POST', body: form });
+    mode = result.mode;
+  } catch(err){
+    document.getElementById('recogResult').innerHTML = `
+      <div class="result-empty">
+        <div style="font-size:34px;margin-bottom:10px;">⚠️</div>
+        Could not reach the recognition service (${err.message}). The backend may not be running —
+        see backend/README.md to start it.
+      </div>`;
+    return;
+  }
+
+  const badge = mode === 'live' ? '<span class="demo-badge" style="background:rgba(31,75,63,0.18);color:var(--green);">Live</span>' : '<span class="demo-badge">Demo Mode</span>';
+  const confidenceRow = result.confidence !== null && result.confidence !== undefined
+    ? `<div class="progress-line"><div class="row"><span>Confidence</span><span>${Math.round(result.confidence*100)}%</span></div><div class="bar-track"><div class="bar-fill" id="confBar"></div></div></div>`
+    : `<p style="font-size:12px;color:var(--ink-soft);margin-top:10px;">No confidence score — this demo result is a deterministic sample, not a real image analysis.</p>`;
+  const noticeHtml = result.notice ? `<p style="font-size:12px;color:var(--gold);margin-top:8px;">${result.notice}</p>` : '';
+  const relatedHtml = (result.relatedHeritage && result.relatedHeritage.length)
+    ? `<div class="modal-block"><h5>Related Heritage Records</h5><p style="font-size:13px;color:var(--ink-soft);">${result.relatedHeritage.map(h=>h.name).join(', ')}</p></div>` : '';
+
+  document.getElementById('recogResult').innerHTML = `
+    <div class="result-card" style="display:block;">
+      <div class="tag">AI IDENTIFICATION RESULT ${badge}</div>
+      <h3>${result.prediction}</h3>
+      <div class="result-meta"><span class="chip">${result.region||''}</span><span class="chip">${result.state||''}</span><span class="chip">${result.category||''}</span></div>
+      <div class="modal-block" style="margin-top:6px;"><h5>Historical Background</h5><p style="font-size:13px;color:var(--ink-soft);">${result.history||'—'}</p></div>
+      <div class="modal-block"><h5>Cultural Meaning</h5><p style="font-size:13px;color:var(--ink-soft);">${result.meaning||'—'}</p></div>
+      <div class="modal-block"><h5>Materials Used</h5><p style="font-size:13px;color:var(--ink-soft);">${result.materials||'—'}</p></div>
+      <div class="modal-block"><h5>Traditional Technique</h5><p style="font-size:13px;color:var(--ink-soft);">${result.technique||'—'}</p></div>
+      ${relatedHtml}
+      ${confidenceRow}
+      ${noticeHtml}
+    </div>`;
+  if(result.confidence !== null && result.confidence !== undefined){
+    setTimeout(()=>{ const b=document.getElementById('confBar'); if(b) b.style.width = Math.round(result.confidence*100)+'%'; }, 60);
+  }
+}
+
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+function buildSearchIndex(){
+  const idx = [];
+  TRADITIONS.forEach(t=>idx.push({type:"Tradition",label:t.name,sub:t.state,action:()=>traditionModal(t)}));
+  CRAFTS.forEach(c=>idx.push({type:"Craft",label:c.name,sub:c.state,action:()=>genericModal(c.name,c.state,`${c.name} is a traditional ${c.category.toLowerCase()} craft from ${c.state}.`)}));
+  DANCES.forEach(d=>idx.push({type:"Dance",label:d.name,sub:d.state,action:()=>genericModal(d.name,d.state,d.desc)}));
+  EVENTS.forEach(e=>idx.push({type:"Festival",label:e.name,sub:e.state,action:()=>eventModal(e)}));
+  ARTISANS.forEach(a=>idx.push({type:"Artisan",label:a.name,sub:a.craft,action:()=>artisanModal(a)}));
+  Object.keys(STATES).forEach(s=>idx.push({type:"State",label:s,sub:STATES[s].region,action:()=>{closeSearch(); document.getElementById('map').scrollIntoView({behavior:"smooth"}); setTimeout(()=>selectState(s),400);}}));
+  return idx;
+}
+let SEARCH_INDEX = [];
+let searchDebounceTimer = null;
+let searchRequestId = 0;
+function openSearch(){ document.getElementById('searchOverlay').classList.add('open'); document.getElementById('searchInput').focus(); }
+function closeSearch(){ document.getElementById('searchOverlay').classList.remove('open'); document.getElementById('searchInput').value=''; renderSearchResults(''); }
+function renderSearchResults(q){
+  const box = document.getElementById('searchResults');
+  if(!q){ box.innerHTML = `<div class="search-results-empty">Start typing to search across all of BharatVerse.</div>`; return; }
+  const matches = SEARCH_INDEX.filter(i=>i.label.toLowerCase().includes(q.toLowerCase()) || i.sub.toLowerCase().includes(q.toLowerCase()));
+  renderSearchGroups(matches, q);
+
+  // Debounced live backend search — merges in database/community-contributed
+  // results (via GET /api/search?q=) that aren't in the bundled local index.
+  clearTimeout(searchDebounceTimer);
+  const myRequestId = ++searchRequestId;
+  searchDebounceTimer = setTimeout(async ()=>{
+    try{
+      const data = await bvFetch(`/search?q=${encodeURIComponent(q)}`);
+      if(myRequestId !== searchRequestId) return; // stale response, user kept typing
+      const liveMatches = [];
+      (data.results?.heritage||[]).forEach(h=>liveMatches.push({type:"Heritage (live)", label:h.name, sub:h.state, action:()=>{ closeSearch(); openSearch(); }}));
+      (data.results?.artisans||[]).forEach(a=>liveMatches.push({type:"Artisan (live)", label:a.name, sub:a.craft, action:()=>{ closeSearch(); }}));
+      (data.results?.events||[]).forEach(e=>liveMatches.push({type:"Event (live)", label:e.name, sub:e.state, action:()=>{ closeSearch(); }}));
+      if(liveMatches.length) renderSearchGroups([...matches, ...liveMatches], q);
+    } catch{ /* backend unavailable — local index results already shown, no error surfaced */ }
+  }, 350);
+}
+function renderSearchGroups(matches, q){
+  const box = document.getElementById('searchResults');
+  if(!matches.length){ box.innerHTML = `<div class="search-results-empty">No results for "${q}".</div>`; return; }
+  const groups = {};
+  matches.slice(0,40).forEach(m=>{ (groups[m.type]=groups[m.type]||[]).push(m); });
+  box.innerHTML = Object.keys(groups).map(type=>`
+    <div class="sr-group"><h6>${type}</h6>
+      ${groups[type].map((m,i)=>`<div class="sr-item" data-type="${type}" data-i="${i}">${m.label}<span>${m.sub}</span></div>`).join("")}
+    </div>`).join("");
+  box.querySelectorAll('.sr-item').forEach(el=>{
+    el.onclick = ()=>{ const item = groups[el.dataset.type][parseInt(el.dataset.i,10)]; closeSearch(); setTimeout(()=>item.action(),150); };
+  });
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+/* =========================================================
+   HERITAGE QUIZ
+   Fetches questions (without answers) from the backend, grades them
+   server-side via POST /api/quiz/submit. If the backend is unreachable,
+   /api/quiz itself still responds with an honestly-labelled small demo
+   bank — see backend/controllers/quiz.controller.js — so this only shows
+   its own local fallback if the network call fails outright.
+   ========================================================= */
+const LOCAL_QUIZ_FALLBACK = [
+  { id: "local-1", question: "Sohrai wall painting is traditionally practised by tribal communities of which state?", options: ["Jharkhand", "Punjab", "Kerala", "Gujarat"], category: "Art", state: "Jharkhand" },
+  { id: "local-2", question: "Madhubani painting originates from the Mithila region of which state?", options: ["Bihar", "Assam", "Odisha", "Rajasthan"], category: "Art", state: "Bihar" },
+  { id: "local-3", question: "Kathakali is a classical dance-drama form native to which state?", options: ["Kerala", "Tamil Nadu", "West Bengal", "Maharashtra"], category: "Dance", state: "Kerala" },
+];
+const LOCAL_QUIZ_ANSWERS = { "local-1": 0, "local-2": 0, "local-3": 0 };
+const LOCAL_QUIZ_EXPLANATIONS = {
+  "local-1": "Sohrai is painted by tribal communities in Jharkhand during the harvest season.",
+  "local-2": "Madhubani takes its name from the Madhubani district in Bihar's Mithila region.",
+  "local-3": "Kathakali developed in Kerala, combining literature, percussion and elaborate face makeup.",
+};
+
+let quizState = { questions: [], current: 0, answers: [], stateFilter: "", locked: false };
+
+async function loadQuiz(stateFilter = "") {
+  quizState = { questions: [], current: 0, answers: [], stateFilter, locked: false };
+  const shell = document.getElementById("quizShell");
+  shell.innerHTML = `<div class="result-empty" id="quizLoading">Loading questions…</div>`;
+
+  let questions = null;
+  let usedLocalFallback = false;
+  try {
+    const q = stateFilter ? `?count=5&state=${encodeURIComponent(stateFilter)}` : `?count=5`;
+    const data = await bvFetch(`/quiz${q}`);
+    questions = data.questions || [];
+    if (!questions.length) questions = LOCAL_QUIZ_FALLBACK, (usedLocalFallback = true);
+  } catch {
+    questions = LOCAL_QUIZ_FALLBACK;
+    usedLocalFallback = true;
+    document.querySelectorAll(".backend-banner").forEach((b) => b.classList.add("show"));
+  }
+
+  quizState.questions = questions;
+  quizState.usedLocalFallback = usedLocalFallback;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const shell = document.getElementById("quizShell");
+  const { questions, current } = quizState;
+  if (!questions.length) {
+    shell.innerHTML = `<div class="result-empty">No quiz questions available right now.</div>`;
+    return;
+  }
+  const q = questions[current];
+  const pct = Math.round((current / questions.length) * 100);
+  shell.innerHTML = `
+    <div class="quiz-meta"><span>Question ${current + 1} of ${questions.length}</span><span>${q.category || ""}${q.state ? " · " + q.state : ""}</span></div>
+    <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-question">${q.question}</div>
+    <div class="quiz-options" id="quizOptions">
+      ${q.options.map((opt, i) => `<button class="quiz-option" data-index="${i}">${opt}</button>`).join("")}
+    </div>
+    <div class="quiz-explain" id="quizExplain"></div>
+    <div class="quiz-nav">
+      <span style="font-size:12px;color:var(--ink-soft);">Score so far: ${quizState.answers.filter((a) => a.correct).length}/${quizState.answers.length}</span>
+      <button class="btn btn-primary btn-sm" id="quizNextBtn" style="display:none;">Next Question →</button>
+    </div>
+  `;
+  document.querySelectorAll("#quizOptions .quiz-option").forEach((btn) => {
+    btn.addEventListener("click", () => selectQuizOption(q, Number(btn.dataset.index)));
+  });
+}
+
+async function selectQuizOption(question, selectedIndex) {
+  if (quizState.locked) return;
+  quizState.locked = true;
+  document.querySelectorAll("#quizOptions .quiz-option").forEach((b) => (b.disabled = true));
+  document.querySelector(`#quizOptions .quiz-option[data-index="${selectedIndex}"]`)?.classList.add("selected");
+
+  let correctIndex, explanation, correct;
+  try {
+    if (quizState.usedLocalFallback) {
+      correctIndex = LOCAL_QUIZ_ANSWERS[question.id];
+      explanation = LOCAL_QUIZ_EXPLANATIONS[question.id] || "";
+      correct = correctIndex === selectedIndex;
+    } else {
+      const result = await bvFetch("/quiz/submit", {
+        method: "POST",
+        body: JSON.stringify({ answers: [{ questionId: question.id, selectedIndex }] }),
+      });
+      const r = result.results[0];
+      correctIndex = r.correctIndex;
+      explanation = r.explanation;
+      correct = r.correct;
+    }
+  } catch {
+    // If grading fails mid-quiz, don't block the experience — mark ungraded.
+    correctIndex = selectedIndex;
+    explanation = "Could not grade this question right now.";
+    correct = null;
+  }
+
+  document.querySelectorAll("#quizOptions .quiz-option").forEach((b) => {
+    const idx = Number(b.dataset.index);
+    if (idx === correctIndex) b.classList.add("correct");
+    else if (idx === selectedIndex && !correct) b.classList.add("incorrect");
+  });
+  const explainEl = document.getElementById("quizExplain");
+  if (explanation) {
+    explainEl.textContent = explanation;
+    explainEl.classList.add("show");
+  }
+
+  quizState.answers.push({ questionId: question.id, selectedIndex, correct: Boolean(correct) });
+
+  const nextBtn = document.getElementById("quizNextBtn");
+  nextBtn.style.display = "inline-flex";
+  nextBtn.textContent = quizState.current + 1 < quizState.questions.length ? "Next Question →" : "See Results";
+  nextBtn.addEventListener("click", () => {
+    quizState.locked = false;
+    if (quizState.current + 1 < quizState.questions.length) {
+      quizState.current++;
+      renderQuizQuestion();
+    } else {
+      renderQuizResults();
+    }
+  }, { once: true });
+}
+
+function renderQuizResults() {
+  const shell = document.getElementById("quizShell");
+  const score = quizState.answers.filter((a) => a.correct).length;
+  const total = quizState.answers.length;
+  const pct = Math.round((score / total) * 100);
+  shell.innerHTML = `
+    <div style="text-align:center;">
+      <div class="quiz-score-ring" style="--pct:${pct};"><span>${score}/${total}</span></div>
+      <h3 style="font-family:'Fraunces',serif;font-size:20px;margin-bottom:6px;">${quizScoreLabel(pct)}</h3>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:20px;">Prototype assessment — questions are drawn from BharatVerse's own dataset, not a certified exam.</p>
+      <button class="btn btn-outline btn-sm" id="quizRestartBtn">Try Another Set</button>
+    </div>
+  `;
+  document.getElementById("quizRestartBtn").addEventListener("click", () => loadQuiz(quizState.stateFilter));
+}
+
+function quizScoreLabel(pct) {
+  if (pct === 100) return "Perfect — a true BharatVerse scholar!";
+  if (pct >= 60) return "Well done — solid heritage knowledge.";
+  return "Good start — explore the sections above and try again.";
+}
+
+/* =========================================================
+   COMMUNITY — ADD YOUR HERITAGE
+   Submits to POST /api/contributions (multipart/form-data). Every
+   submission starts as "Pending Verification" — this frontend never
+   marks anything published on its own. See backend/controllers/
+   contributions.controller.js and services/verification.service.js.
+   ========================================================= */
+const CONTRIBUTION_TYPES = ["Art","Craft","Dance","Festival","Oral History","Language","Recipe","Heritage Site","Artisan"];
+
+function openContributeModal(){
+  openModal(`
+    <div class="modal-content">
+      <h3>Add Your Heritage</h3>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px;">Submissions enter <strong>Pending Verification</strong> before publishing — see Sources &amp; Methodology on the map for how review works.</p>
+      <form id="contributeForm" style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <select name="type" required class="map-search-input" style="flex:1;min-width:160px;">
+            ${CONTRIBUTION_TYPES.map(t=>`<option value="${t}">${t}</option>`).join('')}
+          </select>
+          <input class="map-search-input" style="flex:1;min-width:160px;" name="state" placeholder="State *" required>
+        </div>
+        <input class="map-search-input" name="title" placeholder="Title *" required>
+        <textarea class="map-search-input" name="description" placeholder="Description *" required rows="3" style="resize:vertical;"></textarea>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input class="map-search-input" style="flex:1;min-width:140px;" name="district" placeholder="District">
+          <input class="map-search-input" style="flex:1;min-width:140px;" name="location" placeholder="Location / village">
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input class="map-search-input" style="flex:1;min-width:140px;" name="language" placeholder="Language">
+          <input class="map-search-input" style="flex:1;min-width:140px;" name="community" placeholder="Community / tradition">
+        </div>
+        <input class="map-search-input" name="contributor" placeholder="Your name (optional)">
+        <label style="font-size:12.5px;color:var(--ink-soft);">Photos (up to 6)
+          <input type="file" name="images" accept="image/*" multiple style="display:block;margin-top:4px;">
+        </label>
+        <label style="font-size:12.5px;color:var(--ink-soft);">Oral history audio (optional)
+          <input type="file" name="audio" accept="audio/*" style="display:block;margin-top:4px;">
+        </label>
+        <div id="contributeStatus" style="font-size:12.5px;"></div>
+        <button type="submit" class="btn btn-primary" id="contributeSubmitBtn">Submit for Verification</button>
+      </form>
+    </div>
+  `);
+  document.getElementById('contributeForm').addEventListener('submit', submitContribution);
+}
+
+async function submitContribution(e){
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('contributeSubmitBtn');
+  const status = document.getElementById('contributeStatus');
+  const fd = new FormData(form);
+
+  const title = fd.get('title')?.trim(), description = fd.get('description')?.trim(), state = fd.get('state')?.trim();
+  if(!title || !description || !state){
+    status.innerHTML = `<span style="color:var(--maroon);">Title, description and state are required.</span>`;
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  status.textContent = '';
+  try{
+    const result = await bvFetch('/contributions', { method:'POST', body: fd });
+    form.innerHTML = `
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:38px;margin-bottom:10px;">🌱</div>
+        <h4 style="font-family:'Fraunces',serif;font-size:19px;margin-bottom:8px;">Submitted — Pending Verification</h4>
+        <p style="font-size:13px;color:var(--ink-soft);">${result.notice || "Thank you — your submission will move through review before publishing."}</p>
+      </div>`;
+  } catch(err){
+    btn.disabled = false; btn.textContent = 'Submit for Verification';
+    status.innerHTML = `<span style="color:var(--maroon);">Could not submit (${err.message}). Is the backend running? See backend/README.md.</span>`;
+  }
+}
+
+function init(){
+
+  renderHeritageShowcase();
+  renderRegions();
+  renderFeatured();
+  renderCrafts();
+  renderDances();
+  renderStories();
+  renderArtisans();
+  renderEvents(null);
+  renderKPICharts();
+  initLeafletMap();
+  setupMapControls();
+  SEARCH_INDEX = buildSearchIndex();
+  setAiStatus(false); // default assumption until /api/ai/status responds
+  bvFetch('/ai/status').then(s=>{ aiLiveAvailable = s.mode==='live'; setAiStatus(aiLiveAvailable); }).catch(()=>{});
+
+  const sections = ['home','explore','map','crafts','folk','artisans','bharatai','quiz','community'];
+  window.addEventListener('scroll', ()=>{
+    let current = sections[0];
+    sections.forEach(id=>{
+      const el = document.getElementById(id);
+      if(el && window.scrollY + 120 >= el.offsetTop) current = id;
+    });
+    document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active', a.dataset.target===current));
+  });
+
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        if(e.target.id==='home') animateCounters();
+        if(e.target.classList.contains('dash-observe')) animateDashboard();
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.3});
+  io.observe(document.getElementById('home'));
+  const dashSection = document.getElementById('barChart').closest('.section');
+  if(dashSection){ dashSection.classList.add('dash-observe'); io.observe(dashSection); }
+
+  document.getElementById('heritageShowcase').addEventListener('click', e=>{
+    const c=e.target.closest('[data-heritage]'); if(!c) return;
+    const h=HERITAGE_IMAGES[c.dataset.heritage];
+    openModal(`<div class="modal-media"><img src="${h.image}" alt="${h.name}" style="width:100%;height:100%;object-fit:cover;"></div><div class="modal-content"><div class="region-label">${h.category}</div><h3>${h.name}</h3><div class="modal-block"><p>${h.desc}</p></div><button class="btn btn-primary btn-sm" onclick="closeModal()">Back to Heritage Gallery</button></div>`);
+  });
+
+  document.getElementById('regionGrid').addEventListener('click', e=>{
+    const card = e.target.closest('.region-card'); if(!card) return;
+    const region = REGIONS.find(r=>r.name===card.dataset.region);
+    document.getElementById('map').scrollIntoView({behavior:'smooth'});
+    if(region && region.states.find(s=>STATES[s])) setTimeout(()=>selectState(region.states.find(s=>STATES[s])), 500);
+  });
+
+  document.getElementById('featuredGrid').addEventListener('click', e=>{
+    const c = e.target.closest('[data-tradition]'); if(!c) return;
+    traditionModal(TRADITIONS.find(t=>t.id===c.dataset.tradition));
+  });
+  document.getElementById('craftGrid').addEventListener('click', e=>{
+    const c = e.target.closest('[data-craft]'); if(!c) return;
+    const cr = CRAFTS.find(x=>x.id===c.dataset.craft);
+    genericModal(cr.name, cr.state, `${cr.name} is a traditional ${cr.category.toLowerCase()} craft from ${cr.state}, practiced by artisan communities using techniques handed down over generations.`);
+  });
+  document.getElementById('danceGrid').addEventListener('click', e=>{
+    const c = e.target.closest('[data-dance]'); if(!c) return;
+    const d = DANCES.find(x=>x.id===c.dataset.dance);
+    genericModal(d.name, d.state, d.desc);
+  });
+  document.getElementById('storyGrid').addEventListener('click', e=>{
+    const c = e.target.closest('[data-story]'); if(!c) return;
+    const s = STORIES.find(x=>x.id===c.dataset.story);
+    genericModal(s.title, s.place, s.excerpt + " This is a demo excerpt — the full BharatVerse platform would present the complete oral history alongside audio narration.");
+  });
+  document.getElementById('artisanList').addEventListener('click', e=>{
+    const c = e.target.closest('[data-artisan]'); if(!c) return;
+    artisanModal(ARTISANS.find(a=>a.id===c.dataset.artisan));
+  });
+  document.getElementById('eventList').addEventListener('click', e=>{
+    const c = e.target.closest('[data-event]'); if(!c) return;
+    eventModal(EVENTS.find(x=>x.id===c.dataset.event));
+  });
+  document.getElementById('eventFilters').addEventListener('click', e=>{
+    const b = e.target.closest('.filter-pill'); if(!b) return;
+    renderEvents(b.dataset.filter==='All' ? null : b.dataset.filter);
+  });
+
+  /* State selection is now handled by Leaflet polygon click handlers,
+     wired inside initLeafletMap(). */
+
+  document.getElementById('aiSend').addEventListener('click', aiSend);
+  document.getElementById('aiInput').addEventListener('keydown', e=>{ if(e.key==='Enter') aiSend(); });
+  document.querySelectorAll('.sugg-item').forEach(b=>{
+    b.addEventListener('click', ()=>{ document.getElementById('aiInput').value = b.dataset.q; aiSend(); });
+  });
+  document.querySelectorAll('.lang-pill').forEach(p=>{
+    p.addEventListener('click', ()=>{ document.querySelectorAll('.lang-pill').forEach(x=>x.classList.remove('active')); p.classList.add('active'); });
+  });
+  aiPushMessage('bot', "Namaste! Ask me about any Indian art form, dance, festival or cultural symbol — try one of the suggested questions to get started.", "Bharat AI");
+
+  const dz = document.getElementById('dropzone');
+  document.getElementById('fileInput').addEventListener('change', e=> handleFile(e.target.files[0]));
+  ['dragenter','dragover'].forEach(evt=>dz.addEventListener(evt, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(evt=>dz.addEventListener(evt, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', e=>{ const f = e.dataTransfer.files[0]; if(f) handleFile(f); });
+  document.getElementById('identifyBtn').addEventListener('click', runIdentify);
+
+  document.getElementById('searchBtn').addEventListener('click', openSearch);
+  document.getElementById('searchInput').addEventListener('input', e=>renderSearchResults(e.target.value));
+  document.getElementById('searchOverlay').addEventListener('click', e=>{ if(e.target.id==='searchOverlay') closeSearch(); });
+  document.addEventListener('keydown', e=>{
+    if((e.key==='k' || e.key==='K') && (e.metaKey||e.ctrlKey)){ e.preventDefault(); openSearch(); }
+    if(e.key==='Escape'){ closeSearch(); closeModal(); }
+  });
+
+  checkBackend();
+  initLangSwitcher();
+  loadQuiz();
+  document.getElementById('openContributeBtn').addEventListener('click', openContributeModal);
+  document.getElementById('quizFilters').addEventListener('click', e=>{
+    const b = e.target.closest('.quiz-filter-btn'); if(!b) return;
+    document.querySelectorAll('.quiz-filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    loadQuiz(b.dataset.state);
+  });
+}
+init();
+
+</script>
+</body>
+</html>

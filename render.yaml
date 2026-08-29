@@ -1,0 +1,62 @@
+# Render Blueprint — deploys the BharatVerse backend so the live Vercel
+# frontend can actually reach it (fixes "Backend unavailable" on the
+# deployed demo). Free MongoDB Atlas + Render web service is enough for
+# an SIH jury demo.
+#
+# How to use:
+#   1. Push this repo to GitHub.
+#   2. On https://dashboard.render.com -> New -> Blueprint -> pick this repo.
+#   3. Render reads this file and creates the "bharatverse-backend" web
+#      service automatically. Fill in MONGO_URI (MongoDB Atlas connection
+#      string) and JWT_SECRET when prompted — everything else has a
+#      sensible default and can stay blank (the app runs in honest DEMO
+#      mode for AI/vision until those are set).
+#   4. Once deployed, Render gives you a URL like
+#      https://bharatverse-backend.onrender.com
+#   5. Open the deployed frontend and append ?api=<that URL> once, e.g.
+#      https://bharatverse-three.vercel.app/?api=https://bharatverse-backend.onrender.com
+#      The frontend saves it (localStorage) so it's remembered after that —
+#      no redeploy of the frontend needed. A "set backend URL" link in the
+#      map/quiz banners does the same thing without editing the address bar.
+
+services:
+  - type: web
+    name: bharatverse-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: CLIENT_ORIGIN
+        sync: false
+        # Set this to your deployed frontend origin, e.g.
+        # https://bharatverse-three.vercel.app  (no trailing slash)
+      - key: MONGO_URI
+        sync: false
+        # MongoDB Atlas free-tier connection string, e.g.
+        # mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/bharatverse
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: AI_PROVIDER
+        value: anthropic
+      - key: AI_API_KEY
+        sync: false
+        # Optional. Leave blank to keep Bharat AI in honest DEMO mode.
+      - key: AI_MODEL
+        value: claude-sonnet-4-6
+      - key: VISION_PROVIDER
+        sync: false
+      - key: VISION_API_KEY
+        sync: false
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX
+        value: 300
