@@ -1976,9 +1976,13 @@ async function initLeafletMap(){
   if(!mapEl || typeof L === 'undefined') return;
 
   leafletMapInstance = L.map('leafletMap', {
-    zoomControl:false, minZoom:4, maxZoom:8, attributionControl:true,
+    zoomControl:false, minZoom:3, maxZoom:8, zoomSnap:0.1, attributionControl:true,
     scrollWheelZoom:true,
-  }).setView([22.9, 79.5], 4.4);
+  }).setView([22.82, 82], 3.8);
+  L.tileLayer('https://{s}.tile.openstreetmap.in/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(leafletMapInstance);
   L.control.attribution({prefix:false}).addTo(leafletMapInstance)
     .addAttribution('Boundaries: GADM via geohacker/india (simplified)');
 
