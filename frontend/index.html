@@ -1386,16 +1386,16 @@ window.BHARATVERSE_API_BASE = "";
 function resolveApiBase() {
   // Priority: ?api= query param (persisted for next visit) > previously
   // saved override > window.BHARATVERSE_API_BASE (set by hosting) > localhost
-  // default for local development. This lets a judge/demo laptop point the
-  // static Vercel frontend at a deployed backend without editing any file —
-  // e.g. https://bharatverse-three.vercel.app/?api=https://your-backend.onrender.com
+  // only when the frontend itself is running locally. On a deployed Vercel
+  // site, leaving this blank is safer than silently pointing to localhost.
   const params = new URLSearchParams(window.location.search);
   const fromQuery = params.get("api");
   if (fromQuery) {
     try { localStorage.setItem("bharatverse_api_base", fromQuery); } catch {}
   }
   const saved = fromQuery || (function () { try { return localStorage.getItem("bharatverse_api_base"); } catch { return null; } })();
-  const base = (saved || window.BHARATVERSE_API_BASE || "http://localhost:5000").trim();
+  const localDevFallback = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") ? "http://localhost:5000" : "";
+  const base = (saved || window.BHARATVERSE_API_BASE || localDevFallback).trim();
   return base.replace(/\/+$/, "").replace(/\/api$/, "");
 }
 const API_BASE = resolveApiBase() + "/api";

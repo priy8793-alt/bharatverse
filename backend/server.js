@@ -24,11 +24,29 @@ const quizRoutes = require("./routes/quiz.routes");
 
 const app = express();
 
+const parseAllowedOrigins = () => {
+  const fromEnv = (process.env.CLIENT_ORIGIN || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  const localhost = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000"];
+  return [...new Set([...fromEnv, ...localhost])];
+};
+
 app.set("trust proxy", 1);
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "*",
+    origin: (origin, callback) => {
+      const allowedOrigins = parseAllowedOrigins();
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("CORS blocked for this origin"));
+    },
     credentials: true,
   })
 );
