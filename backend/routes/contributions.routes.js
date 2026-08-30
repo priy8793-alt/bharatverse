@@ -9,6 +9,7 @@ router.post(
   upload.fields([
     { name: "images", maxCount: 6 },
     { name: "audio", maxCount: 1 },
+    { name: "video", maxCount: 1 },
   ]),
   ctrl.createContribution
 );

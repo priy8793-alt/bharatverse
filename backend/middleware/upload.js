@@ -7,8 +7,10 @@ if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const ALLOWED_AUDIO_TYPES = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg", "audio/webm"];
+const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/quicktime", "video/webm", "video/ogg", "video/x-matroska"];
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024; // 8MB
 const MAX_AUDIO_BYTES = 25 * 1024 * 1024; // 25MB
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // 50MB
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
@@ -29,6 +31,10 @@ function fileFilter(req, file, cb) {
     if (!ALLOWED_AUDIO_TYPES.includes(file.mimetype)) {
       return cb(new Error(`Unsupported audio type: ${file.mimetype}`));
     }
+  } else if (file.fieldname === "video") {
+    if (!ALLOWED_VIDEO_TYPES.includes(file.mimetype)) {
+      return cb(new Error(`Unsupported video type: ${file.mimetype}`));
+    }
   }
   cb(null, true);
 }
@@ -36,7 +42,13 @@ function fileFilter(req, file, cb) {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: Math.max(MAX_IMAGE_BYTES, MAX_AUDIO_BYTES) },
+  limits: { fileSize: Math.max(MAX_IMAGE_BYTES, MAX_AUDIO_BYTES, MAX_VIDEO_BYTES) },
 });
 
-module.exports = { upload, UPLOAD_DIR, MAX_IMAGE_BYTES, MAX_AUDIO_BYTES };
+module.exports = {
+  upload,
+  UPLOAD_DIR,
+  MAX_IMAGE_BYTES,
+  MAX_AUDIO_BYTES,
+  MAX_VIDEO_BYTES,
+};

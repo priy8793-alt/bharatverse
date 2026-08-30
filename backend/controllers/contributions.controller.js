@@ -13,11 +13,13 @@ async function createContribution(req, res, next) {
 
     const images = (req.files?.images || []).map((f) => `/uploads/${f.filename}`);
     const audio = req.files?.audio?.[0] ? `/uploads/${req.files.audio[0].filename}` : undefined;
+    const video = req.files?.video?.[0] ? `/uploads/${req.files.video[0].filename}` : undefined;
 
     const contribution = await Contribution.create({
       ...req.body,
       images,
       audio,
+      video,
       status: "pending",
     });
 

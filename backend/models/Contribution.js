@@ -33,6 +33,7 @@ const ContributionSchema = new mongoose.Schema(
 
     images: [{ type: String }],
     audio: { type: String },
+    video: { type: String },
 
     status: {
       type: String,
