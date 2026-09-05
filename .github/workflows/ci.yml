@@ -26,22 +26,54 @@ jobs:
         working-directory: backend
         run: npm ci --omit=dev
 
-      - name: Check server entry-point parses
+      - name: Check all backend JavaScript files parse
         working-directory: backend
-        run: node --check server.js
-
-      - name: Check all route files parse
-        working-directory: backend
+        shell: bash
         run: |
-          for f in routes/*.js; do node --check "$f" && echo "  ✓ $f"; done
+          set -euo pipefail
+          while IFS= read -r -d '' f; do
+            node --check "$f"
+            echo "✓ $f"
+          done < <(find . -type f -name '*.js' -not -path './node_modules/*' -print0)
 
-      - name: Check all service files parse
+      - name: Validate package metadata
         working-directory: backend
-        run: |
-          for f in services/*.js; do node --check "$f" && echo "  ✓ $f"; done
+        run: node -e "const p=require('./package.json'); if(!p.scripts.start) throw new Error('Missing start script'); console.log('package.json is valid ✓')"
 
       - name: Validate vercel.json
         run: node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8')); console.log('vercel.json is valid JSON ✓')"
+
+      - name: Ensure tracked environment files are absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-files | grep -E '(^|/)(\.env|\.env\.[^e])$' >/dev/null; then
+            echo 'ERROR: tracked environment/secrets file detected.'
+            git ls-files | grep -E '(^|/)(\.env|\.env\.[^e])$'
+            exit 1
+          fi
+          echo 'No tracked environment files ✓'
+
+  frontend-check:
+    name: Frontend — static checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check frontend entry exists
+        run: test -f frontend/index.html
+
+      - name: Check for obvious broken transition declarations
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RIn --exclude-dir=.git -E 'transition:[[:space:]]*[^;]*\.0\.[0-9]+s' frontend; then
+            echo 'ERROR: malformed CSS transition duration detected.'
+            exit 1
+          fi
+          echo 'Frontend CSS transition syntax check passed ✓'
 
   docker-lint:
     name: Dockerfile lint
